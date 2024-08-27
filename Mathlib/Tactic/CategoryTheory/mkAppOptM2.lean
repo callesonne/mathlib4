@@ -83,8 +83,10 @@ private partial def mkAppOptMAux (f : Expr) (xs : Array (Option Expr)) : Nat →
       mkAppMFinal `mkAppOptM f args instMVars
     -- TODO
     else do
-      let xs : Array Expr := xs.foldl (fun r x? => match x? with | none => r | some x => r.push x) #[]
-      throwAppBuilderException `mkAppOptM ("too many arguments provided to" ++ indentExpr f ++ Format.line ++ "arguments" ++ xs)
+      let xs : Array Expr := xs.foldl
+        (fun r x? => match x? with | none => r | some x => r.push x) #[]
+      throwAppBuilderException `mkAppOptM ("too many arguments provided to" ++ indentExpr f ++
+        Format.line ++ "arguments" ++ xs)
 
 /--
   Similar to `mkAppM`, but it allows us to specify which arguments are provided explicitly using `Option` type.
