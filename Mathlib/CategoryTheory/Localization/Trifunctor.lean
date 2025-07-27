@@ -163,10 +163,10 @@ variable
   (iso : bifunctorComp₁₂ F₁₂ G ≅ bifunctorComp₂₃ F G₂₃)
   (F₁₂' : D₁ ⥤ D₂ ⥤ D₁₂) (G' : D₁₂ ⥤ D₃ ⥤ D)
   (F' : D₁ ⥤ D₂₃ ⥤ D) (G₂₃' : D₂ ⥤ D₃ ⥤ D₂₃)
-  [Lifting₂ L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂']
-  [Lifting₂ L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G']
-  [Lifting₂ L₁ L₂₃ W₁ W₂₃ (F ⋙ (whiskeringRight _ _ _).obj L) F']
-  [Lifting₂ L₂ L₃ W₂ W₃ (G₂₃ ⋙ (whiskeringRight _ _ _).obj L₂₃) G₂₃']
+  [Lifting₂ L₁ L₂ W₁ W₂ (F₁₂ ⋙ (postcompose _ _ _).obj L₁₂) F₁₂']
+  [Lifting₂ L₁₂ L₃ W₁₂ W₃ (G ⋙ (postcompose _ _ _).obj L) G']
+  [Lifting₂ L₁ L₂₃ W₁ W₂₃ (F ⋙ (postcompose _ _ _).obj L) F']
+  [Lifting₂ L₂ L₃ W₂ W₃ (G₂₃ ⋙ (postcompose _ _ _).obj L₂₃) G₂₃']
 
 /-- The construction `bifunctorComp₁₂` of a trifunctor by composition of bifunctors
 is compatible with localization. -/
@@ -175,12 +175,12 @@ noncomputable def Lifting₃.bifunctorComp₁₂ :
       ((Functor.postcompose₃.obj L).obj (bifunctorComp₁₂ F₁₂ G))
       (bifunctorComp₁₂ F₁₂' G') where
   iso' :=
-    ((whiskeringRight C₁ _ _).obj
-      ((whiskeringRight C₂ _ _).obj ((whiskeringLeft _ _ D).obj L₃))).mapIso
+    ((postcompose C₁ _ _).obj
+      ((postcompose C₂ _ _).obj ((whiskeringLeft _ _ D).obj L₃))).mapIso
         ((bifunctorComp₁₂Functor.mapIso
-          (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
+          (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (postcompose _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
         (bifunctorComp₁₂Functor.obj F₁₂).mapIso
-          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G')
+          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (postcompose _ _ _).obj L) G')
 
 /-- The construction `bifunctorComp₂₃` of a trifunctor by composition of bifunctors
 is compatible with localization. -/
@@ -190,9 +190,9 @@ noncomputable def Lifting₃.bifunctorComp₂₃ :
       (bifunctorComp₂₃ F' G₂₃') where
   iso' :=
     ((whiskeringLeft _ _ _).obj L₁).mapIso ((bifunctorComp₂₃Functor.obj F').mapIso
-      (Lifting₂.iso L₂ L₃ W₂ W₃ (G₂₃ ⋙ (whiskeringRight _ _ _).obj L₂₃) G₂₃')) ≪≫
+      (Lifting₂.iso L₂ L₃ W₂ W₃ (G₂₃ ⋙ (postcompose _ _ _).obj L₂₃) G₂₃')) ≪≫
         (bifunctorComp₂₃Functor.mapIso
-          (Lifting₂.iso L₁ L₂₃ W₁ W₂₃ (F ⋙ (whiskeringRight _ _ _).obj L) F')).app G₂₃
+          (Lifting₂.iso L₁ L₂₃ W₁ W₂₃ (F ⋙ (postcompose _ _ _).obj L) F')).app G₂₃
 
 variable {F₁₂ G F G₂₃}
 
@@ -206,15 +206,15 @@ lemma associator_hom_app_app_app (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
     (((associator L₁ L₂ L₃ L₁₂ L₂₃ L W₁ W₂ W₃ W₁₂ W₂₃ iso F₁₂' G' F' G₂₃').hom.app (L₁.obj X₁)).app
       (L₂.obj X₂)).app (L₃.obj X₃) =
         (G'.map (((Lifting₂.iso L₁ L₂ W₁ W₂
-          (F₁₂ ⋙ (whiskeringRight C₂ C₁₂ D₁₂).obj L₁₂) F₁₂').hom.app X₁).app X₂)).app (L₃.obj X₃) ≫
-          ((Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight C₃ C D).obj L) G').hom.app
+          (F₁₂ ⋙ (postcompose C₂ C₁₂ D₁₂).obj L₁₂) F₁₂').hom.app X₁).app X₂)).app (L₃.obj X₃) ≫
+          ((Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (postcompose C₃ C D).obj L) G').hom.app
               ((F₁₂.obj X₁).obj X₂)).app X₃ ≫
             L.map (((iso.hom.app X₁).app X₂).app X₃) ≫
           ((Lifting₂.iso L₁ L₂₃ W₁ W₂₃
-            (F ⋙ (whiskeringRight _ _ _).obj L) F').inv.app X₁).app ((G₂₃.obj X₂).obj X₃) ≫
+            (F ⋙ (postcompose _ _ _).obj L) F').inv.app X₁).app ((G₂₃.obj X₂).obj X₃) ≫
         (F'.obj (L₁.obj X₁)).map
           (((Lifting₂.iso L₂ L₃ W₂ W₃
-            (G₂₃ ⋙ (whiskeringRight _ _ _).obj L₂₃) G₂₃').inv.app X₂).app X₃) := by
+            (G₂₃ ⋙ (postcompose _ _ _).obj L₂₃) G₂₃').inv.app X₂).app X₃) := by
   dsimp [associator]
   rw [lift₃NatTrans_app_app_app]
   dsimp [Lifting₃.iso, Lifting₃.bifunctorComp₁₂, Lifting₃.bifunctorComp₂₃]

@@ -99,7 +99,7 @@ Yoneda embedding.
 @[simp]
 theorem whiskering_preadditiveYoneda :
     preadditiveYoneda ⋙
-        (whiskeringRight Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp) =
+        (postcompose Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp) =
       yoneda :=
   rfl
 
@@ -109,23 +109,23 @@ Yoneda embedding.
 @[simp]
 theorem whiskering_preadditiveCoyoneda :
     preadditiveCoyoneda ⋙
-        (whiskeringRight C AddCommGrp (Type v)).obj (forget AddCommGrp) =
+        (postcompose C AddCommGrp (Type v)).obj (forget AddCommGrp) =
       coyoneda :=
   rfl
 
 instance full_preadditiveYoneda : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ AddCommGrp).Full :=
   let _ : Functor.Full (preadditiveYoneda ⋙
-      (whiskeringRight Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp)) :=
+      (postcompose Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp)) :=
     Yoneda.yoneda_full
   Functor.Full.of_comp_faithful preadditiveYoneda
-    ((whiskeringRight Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp))
+    ((postcompose Cᵒᵖ AddCommGrp (Type v)).obj (forget AddCommGrp))
 
 instance full_preadditiveCoyoneda : (preadditiveCoyoneda : Cᵒᵖ ⥤ C ⥤ AddCommGrp).Full :=
   let _ : Functor.Full (preadditiveCoyoneda ⋙
-      (whiskeringRight C AddCommGrp (Type v)).obj (forget AddCommGrp)) :=
+      (postcompose C AddCommGrp (Type v)).obj (forget AddCommGrp)) :=
     Coyoneda.coyoneda_full
   Functor.Full.of_comp_faithful preadditiveCoyoneda
-    ((whiskeringRight C AddCommGrp (Type v)).obj (forget AddCommGrp))
+    ((postcompose C AddCommGrp (Type v)).obj (forget AddCommGrp))
 
 instance faithful_preadditiveYoneda : (preadditiveYoneda : C ⥤ Cᵒᵖ ⥤ AddCommGrp).Faithful :=
   Functor.Faithful.of_comp_eq whiskering_preadditiveYoneda

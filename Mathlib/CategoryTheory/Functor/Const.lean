@@ -91,10 +91,10 @@ instance [Nonempty J] : Faithful (const J : C ⥤ J ⥤ C) where
   map_injective e := NatTrans.congr_app e (Classical.arbitrary J)
 
 /-- The canonical isomorphism
-`F ⋙ Functor.const J ≅ Functor.const F ⋙ (whiskeringRight J _ _).obj L`. -/
+`F ⋙ Functor.const J ≅ Functor.const F ⋙ (postcompose J _ _).obj L`. -/
 @[simps!]
 def compConstIso (F : C ⥤ D) :
-    F ⋙ Functor.const J ≅ Functor.const J ⋙ (whiskeringRight J C D).obj F :=
+    F ⋙ Functor.const J ≅ Functor.const J ⋙ (postcompose J C D).obj F :=
   NatIso.ofComponents
     (fun X => NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
     (by aesop_cat)

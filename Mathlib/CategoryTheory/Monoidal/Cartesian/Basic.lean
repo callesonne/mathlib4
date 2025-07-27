@@ -634,7 +634,7 @@ lemma prodComparisonNatTrans_id :
 `prodComparison`. -/
 @[simps]
 def prodComparisonBifunctorNatTrans :
-    curriedTensor C ⋙ (Functor.whiskeringRight _ _ _).obj F ⟶
+    curriedTensor C ⋙ (Functor.postcompose _ _ _).obj F ⟶
       F ⋙ curriedTensor D ⋙ (Functor.whiskeringLeft _ _ _).obj F where
   app A := prodComparisonNatTrans F A
   naturality x y f := by
@@ -645,7 +645,7 @@ variable {E : Type u₂} [Category.{v₂} E] [CartesianMonoidalCategory E] (G : 
 
 theorem prodComparisonBifunctorNatTrans_comp : prodComparisonBifunctorNatTrans (F ⋙ G) =
     Functor.whiskerRight
-      (prodComparisonBifunctorNatTrans F) ((Functor.whiskeringRight _ _ _).obj G) ≫
+      (prodComparisonBifunctorNatTrans F) ((Functor.postcompose _ _ _).obj G) ≫
         Functor.whiskerLeft F (Functor.whiskerRight (prodComparisonBifunctorNatTrans G)
           ((Functor.whiskeringLeft _ _ _).obj F)) := by
   ext; simp [prodComparison_comp]
@@ -714,7 +714,7 @@ noncomputable def prodComparisonNatIso (A : C) [∀ B, PreservesLimit (pair A B)
 `prodComparison F A B` is an isomorphism. -/
 @[simps! hom inv]
 noncomputable def prodComparisonBifunctorNatIso [∀ A B, PreservesLimit (pair A B) F] :
-    curriedTensor C ⋙ (Functor.whiskeringRight _ _ _).obj F ≅
+    curriedTensor C ⋙ (Functor.postcompose _ _ _).obj F ≅
       F ⋙ curriedTensor D ⋙ (Functor.whiskeringLeft _ _ _).obj F :=
   asIso (prodComparisonBifunctorNatTrans F)
 

@@ -181,7 +181,7 @@ def whiskerLeft (φ : CatCospanTransform F G F' G')
   right := Functor.whiskerLeft φ.right α.right
   base := Functor.whiskerLeft φ.base α.base
 
-/-- Whiskering right of a `CatCospanTransformMorphism` by a `CatCospanTransform`. -/
+/-- Postcomposing of a `CatCospanTransformMorphism` by a `CatCospanTransform`. -/
 @[simps]
 def whiskerRight {ψ ψ' : CatCospanTransform F G F' G'} (α : ψ ⟶ ψ')
     (φ : CatCospanTransform F' G' F'' G'') :

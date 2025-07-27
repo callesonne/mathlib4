@@ -347,15 +347,15 @@ theorem whiskeringLeft_comp_evaluation (F : A ⥤ B) (a : A) :
 /-- Whiskering by `F` and then evaluating at `a` is the same as evaluating at `F` and then
 applying `F`. -/
 @[simps!]
-def whiskeringRightCompEvaluation (F : B ⥤ C) (a : A) :
-    (whiskeringRight A B C).obj F ⋙ (evaluation _ _).obj a ≅ (evaluation _ _).obj a ⋙ F :=
+def postcomposeCompEvaluation (F : B ⥤ C) (a : A) :
+    (postcompose A B C).obj F ⋙ (evaluation _ _).obj a ≅ (evaluation _ _).obj a ⋙ F :=
   Iso.refl _
 
 /-- Whiskering by `F` and then evaluating at `a` is the same as evaluating at `F` and then
 applying `F`. -/
 @[simp]
-theorem whiskeringRight_comp_evaluation (F : B ⥤ C) (a : A) :
-    (whiskeringRight A B C).obj F ⋙ (evaluation _ _).obj a = (evaluation _ _).obj a ⋙ F :=
+theorem postcompose_comp_evaluation (F : B ⥤ C) (a : A) :
+    (postcompose A B C).obj F ⋙ (evaluation _ _).obj a = (evaluation _ _).obj a ⋙ F :=
   rfl
 
 variable (A B C)

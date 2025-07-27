@@ -86,7 +86,7 @@ variable (J) (C) in
     naturally in `F` and `X`. -/
 @[simps!]
 noncomputable def whiskeringLimYonedaIsoCones : whiskeringLeft _ _ _ ⋙
-    (whiskeringRight _ _ _).obj lim ⋙ (whiskeringLeft _ _ _).obj coyoneda ≅ cones J C :=
+    (postcompose _ _ _).obj lim ⋙ (whiskeringLeft _ _ _).obj coyoneda ≅ cones J C :=
   NatIso.ofComponents coyonedaCompLimIsoCones
 
 /-- A cocone on `F` with cocone point `X` is the same as an element of `lim Hom(F·, X)`. -/
@@ -107,7 +107,7 @@ variable (J) (C) in
     naturally in `F` and `X`. -/
 @[simps!]
 noncomputable def opHomCompWhiskeringLimYonedaIsoCocones : opHom _ _ ⋙ whiskeringLeft _ _ _ ⋙
-      (whiskeringRight _ _ _).obj lim ⋙ (whiskeringLeft _ _ _).obj yoneda ≅ cocones J C :=
+      (postcompose _ _ _).obj lim ⋙ (whiskeringLeft _ _ _).obj yoneda ≅ cocones J C :=
   NatIso.ofComponents (fun F => yonedaCompLimIsoCocones F.unop)
 
 end CategoryTheory.Limits

@@ -418,8 +418,8 @@ def congrLeft (e : C ≌ D) : C ⥤ E ≌ D ⥤ E where
 /-- If `C` is equivalent to `D`, then `E ⥤ C` is equivalent to `E ⥤ D`. -/
 @[simps! functor inverse unitIso counitIso]
 def congrRight (e : C ≌ D) : E ⥤ C ≌ E ⥤ D where
-  functor := (whiskeringRight _ _ _).obj e.functor
-  inverse := (whiskeringRight _ _ _).obj e.inverse
+  functor := (postcompose _ _ _).obj e.functor
+  inverse := (postcompose _ _ _).obj e.inverse
   unitIso := NatIso.ofComponents
       fun F => F.rightUnitor.symm ≪≫ isoWhiskerLeft F e.unitIso ≪≫ Functor.associator _ _ _
   counitIso := NatIso.ofComponents
@@ -430,7 +430,7 @@ variable (E) in
 @[simps]
 def congrRightFunctor : (C ≌ D) ⥤ ((E ⥤ C) ≌ (E ⥤ D)) where
   obj e := e.congrRight
-  map {e f} α := mkHom <| (whiskeringRight _ _ _).map <| asNatTrans α
+  map {e f} α := mkHom <| (postcompose _ _ _).map <| asNatTrans α
 
 section CancellationLemmas
 
@@ -637,7 +637,7 @@ instance isEquivalence_trans (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEq
 instance (F : C ⥤ D) [IsEquivalence F] : IsEquivalence ((whiskeringLeft C D E).obj F) :=
   (inferInstance : IsEquivalence (Equivalence.congrLeft F.asEquivalence).inverse)
 
-instance (F : C ⥤ D) [IsEquivalence F] : IsEquivalence ((whiskeringRight E C D).obj F) :=
+instance (F : C ⥤ D) [IsEquivalence F] : IsEquivalence ((postcompose E C D).obj F) :=
   (inferInstance : IsEquivalence (Equivalence.congrRight F.asEquivalence).functor)
 
 end Functor

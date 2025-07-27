@@ -68,12 +68,12 @@ lemma reflectsIsomorphisms_of_comp (F : C ⥤ D) (G : D ⥤ E)
     infer_instance
 
 instance (F : D ⥤ E) [F.ReflectsIsomorphisms] :
-    ((whiskeringRight C D E).obj F).ReflectsIsomorphisms where
+    ((postcompose C D E).obj F).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
     rw [NatTrans.isIso_iff_isIso_app]
     intro Z
     rw [← isIso_iff_of_reflects_iso _ F]
-    change IsIso ((((whiskeringRight C D E).obj F).map f).app Z)
+    change IsIso ((((postcompose C D E).obj F).map f).app Z)
     infer_instance
 
 end ReflectsIso

@@ -80,8 +80,8 @@ theorem sheafificationWhiskerLeftIso_inv_app (P : Cᵒᵖ ⥤ D) (F : D ⥤ E)
 /-- The isomorphism between the sheafification of `P` composed with `F` and
 the sheafification of `P ⋙ F`, functorially in `P`. -/
 noncomputable def sheafificationWhiskerRightIso :
-    J.sheafification D ⋙ (whiskeringRight _ _ _).obj F ≅
-      (whiskeringRight _ _ _).obj F ⋙ J.sheafification E := by
+    J.sheafification D ⋙ (postcompose _ _ _).obj F ≅
+      (postcompose _ _ _).obj F ⋙ J.sheafification E := by
   refine associator _ _ _ ≪≫ ?_
   refine isoWhiskerLeft (J.plusFunctor D) (J.plusFunctorWhiskerRightIso _) ≪≫ ?_
   refine ?_ ≪≫ associator _ _ _

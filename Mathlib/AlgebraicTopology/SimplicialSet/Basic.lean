@@ -99,7 +99,7 @@ instance hasColimits {n : ℕ} : HasColimits (Truncated n) := by
 /-- The ulift functor `SSet.Truncated.{u} ⥤ SSet.Truncated.{max u v}` on truncated
 simplicial sets. -/
 def uliftFunctor (k : ℕ) : SSet.Truncated.{u} k ⥤ SSet.Truncated.{max u v} k :=
-  (whiskeringRight _ _ _).obj CategoryTheory.uliftFunctor.{v, u}
+  (postcompose _ _ _).obj CategoryTheory.uliftFunctor.{v, u}
 
 @[ext]
 lemma hom_ext {n : ℕ} {X Y : Truncated n} {f g : X ⟶ Y} (w : ∀ n, f.app n = g.app n) :

@@ -37,7 +37,7 @@ by forming the category of functors out of `C`. -/
 @[simps]
 def exp : Cat ⥤ Cat where
   obj D := Cat.of (C ⥤ D)
-  map F := (whiskeringRight _ _ _).obj F
+  map F := (postcompose _ _ _).obj F
 
 end Cat
 
@@ -79,7 +79,7 @@ lemma ihom_obj (D : Type u) [Category.{u} D] :
 
 @[simp]
 lemma ihom_map {D E : Type u} [Category.{u} D] [Category.{u} E] (F : D ⥤ E) :
-    (ihom (Cat.of C)).map F.toCatHom = (whiskeringRight _ _ _).obj F := rfl
+    (ihom (Cat.of C)).map F.toCatHom = (postcompose _ _ _).obj F := rfl
 
 end
 

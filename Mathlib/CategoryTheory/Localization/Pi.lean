@@ -74,11 +74,11 @@ the induced functor `(Discrete J ⥤ C) ⥤ (Discrete J ⥤ D)` is also a locali
 for `W.functorCategory (Discrete J)` if `W` contains identities. -/
 instance {J : Type} [Finite J] {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D]
     (L : C ⥤ D) (W : MorphismProperty C) [W.ContainsIdentities] [L.IsLocalization W] :
-    ((whiskeringRight (Discrete J) C D).obj L).IsLocalization
+    ((postcompose (Discrete J) C D).obj L).IsLocalization
       (W.functorCategory (Discrete J)) := by
   let E := piEquivalenceFunctorDiscrete J C
   let E' := piEquivalenceFunctorDiscrete J D
-  let L₂ := (whiskeringRight (Discrete J) C D).obj L
+  let L₂ := (postcompose (Discrete J) C D).obj L
   let L₁ := Functor.pi (fun (_ : J) => L)
   have : CatCommSq E.functor L₁ L₂ E'.functor :=
     ⟨(Functor.rightUnitor _).symm ≪≫ isoWhiskerLeft _ E'.counitIso.symm ≪≫

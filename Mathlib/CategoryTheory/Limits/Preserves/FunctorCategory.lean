@@ -107,22 +107,22 @@ instance whiskeringLeft_preservesColimit [HasColimitsOfSize.{w, w'} D] (F : C �
     PreservesColimitsOfSize.{w, w'} ((whiskeringLeft C E D).obj F) :=
   ⟨fun {J} _ => whiskeringLeft_preservesColimitsOfShape J F⟩
 
-instance whiskeringRight_preservesLimitsOfShape {C : Type*} [Category C] {D : Type*}
+instance postcompose_preservesLimitsOfShape {C : Type*} [Category C] {D : Type*}
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasLimitsOfShape J D] (F : D ⥤ E) [PreservesLimitsOfShape J F] :
-    PreservesLimitsOfShape J ((whiskeringRight C D E).obj F) :=
+    PreservesLimitsOfShape J ((postcompose C D E).obj F) :=
   ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsLimits _ (fun k => ?_)
       change IsLimit (((evaluation _ _).obj k ⋙ F).mapCone c)
       exact isLimitOfPreserves _ hc⟩⟩⟩
 
-/-- Whiskering right and then taking a limit is the same as taking the limit and applying the
+/-- Postcomposing and then taking a limit is the same as taking the limit and applying the
     functor. -/
 def limitCompWhiskeringRightIsoLimitComp {C : Type*} [Category C] {D : Type*}
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasLimitsOfShape J D] (F : D ⥤ E) [PreservesLimitsOfShape J F] (G : J ⥤ C ⥤ D) :
-    limit (G ⋙ (whiskeringRight _ _ _).obj F) ≅ limit G ⋙ F :=
+    limit (G ⋙ (postcompose _ _ _).obj F) ≅ limit G ⋙ F :=
   (preservesLimitIso _ _).symm
 
 @[reassoc (attr := simp)]
@@ -130,7 +130,7 @@ theorem limitCompWhiskeringRightIsoLimitComp_inv_π {C : Type*} [Category C] {D 
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasLimitsOfShape J D] (F : D ⥤ E) [PreservesLimitsOfShape J F] (G : J ⥤ C ⥤ D) (j : J) :
     (limitCompWhiskeringRightIsoLimitComp F G).inv ≫
-      limit.π (G ⋙ (whiskeringRight _ _ _).obj F) j = whiskerRight (limit.π G j) F := by
+      limit.π (G ⋙ (postcompose _ _ _).obj F) j = whiskerRight (limit.π G j) F := by
   simp [limitCompWhiskeringRightIsoLimitComp]
 
 @[reassoc (attr := simp)]
@@ -138,32 +138,32 @@ theorem limitCompWhiskeringRightIsoLimitComp_hom_whiskerRight_π {C : Type*} [Ca
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasLimitsOfShape J D] (F : D ⥤ E) [PreservesLimitsOfShape J F] (G : J ⥤ C ⥤ D) (j : J) :
     (limitCompWhiskeringRightIsoLimitComp F G).hom ≫ whiskerRight (limit.π G j) F =
-      limit.π (G ⋙ (whiskeringRight _ _ _).obj F) j := by
+      limit.π (G ⋙ (postcompose _ _ _).obj F) j := by
   simp [← Iso.eq_inv_comp]
 
-instance whiskeringRight_preservesColimitsOfShape {C : Type*} [Category C] {D : Type*}
+instance postcompose_preservesColimitsOfShape {C : Type*} [Category C] {D : Type*}
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasColimitsOfShape J D] (F : D ⥤ E) [PreservesColimitsOfShape J F] :
-    PreservesColimitsOfShape J ((whiskeringRight C D E).obj F) :=
+    PreservesColimitsOfShape J ((postcompose C D E).obj F) :=
   ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsColimits _ (fun k => ?_)
       change IsColimit (((evaluation _ _).obj k ⋙ F).mapCocone c)
       exact isColimitOfPreserves _ hc⟩⟩⟩
 
-/-- Whiskering right and then taking a colimit is the same as taking the colimit and applying the
+/-- Postcomposing and then taking a colimit is the same as taking the colimit and applying the
     functor. -/
 def colimitCompWhiskeringRightIsoColimitComp {C : Type*} [Category C] {D : Type*}
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasColimitsOfShape J D] (F : D ⥤ E) [PreservesColimitsOfShape J F] (G : J ⥤ C ⥤ D) :
-    colimit (G ⋙ (whiskeringRight _ _ _).obj F) ≅ colimit G ⋙ F :=
+    colimit (G ⋙ (postcompose _ _ _).obj F) ≅ colimit G ⋙ F :=
   (preservesColimitIso _ _).symm
 
 @[reassoc (attr := simp)]
 theorem ι_colimitCompWhiskeringRightIsoColimitComp_hom {C : Type*} [Category C] {D : Type*}
     [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasColimitsOfShape J D] (F : D ⥤ E) [PreservesColimitsOfShape J F] (G : J ⥤ C ⥤ D) (j : J) :
-    colimit.ι (G ⋙ (whiskeringRight _ _ _).obj F) j ≫
+    colimit.ι (G ⋙ (postcompose _ _ _).obj F) j ≫
       (colimitCompWhiskeringRightIsoColimitComp F G).hom = whiskerRight (colimit.ι G j) F := by
   simp [colimitCompWhiskeringRightIsoColimitComp]
 
@@ -172,19 +172,19 @@ theorem whiskerRight_ι_colimitCompWhiskeringRightIsoColimitComp_inv {C : Type*}
     {D : Type*} [Category D] {E : Type*} [Category E] {J : Type*} [Category J]
     [HasColimitsOfShape J D] (F : D ⥤ E) [PreservesColimitsOfShape J F] (G : J ⥤ C ⥤ D) (j : J) :
     whiskerRight (colimit.ι G j) F ≫ (colimitCompWhiskeringRightIsoColimitComp F G).inv =
-      colimit.ι (G ⋙ (whiskeringRight _ _ _).obj F) j := by
+      colimit.ι (G ⋙ (postcompose _ _ _).obj F) j := by
   simp [Iso.comp_inv_eq]
 
-instance whiskeringRightPreservesLimits {C : Type*} [Category C] {D : Type*} [Category D]
+instance postcomposePreservesLimits {C : Type*} [Category C] {D : Type*} [Category D]
     {E : Type*} [Category E] (F : D ⥤ E) [HasLimitsOfSize.{w, w'} D]
     [PreservesLimitsOfSize.{w, w'} F] :
-    PreservesLimitsOfSize.{w, w'} ((whiskeringRight C D E).obj F) :=
+    PreservesLimitsOfSize.{w, w'} ((postcompose C D E).obj F) :=
   ⟨inferInstance⟩
 
-instance whiskeringRightPreservesColimits {C : Type*} [Category C] {D : Type*} [Category D]
+instance postcomposePreservesColimits {C : Type*} [Category C] {D : Type*} [Category D]
     {E : Type*} [Category E] (F : D ⥤ E) [HasColimitsOfSize.{w, w'} D]
     [PreservesColimitsOfSize.{w, w'} F] :
-    PreservesColimitsOfSize.{w, w'} ((whiskeringRight C D E).obj F) :=
+    PreservesColimitsOfSize.{w, w'} ((postcompose C D E).obj F) :=
   ⟨inferInstance⟩
 
 /-- If `Lan F.op : (Cᵒᵖ ⥤ Type*) ⥤ (Dᵒᵖ ⥤ Type*)` preserves limits of shape `J`, so will `F`. -/
@@ -223,7 +223,7 @@ variable [PreservesLimitsOfShape J (colim : (K ⥤ C) ⥤ _)]
 noncomputable instance : PreservesLimitsOfShape J (colim : (K ⥤ D ⥤ C) ⥤ _) :=
   preservesLimitsOfShape_of_evaluation _ _ (fun d =>
     let i : (colim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
-        colimit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
+        colimit ((postcompose K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (colimitObjIsoColimitCompEvaluation _ _) ≪≫
           (by exact HasColimit.isoOfNatIso (Iso.refl _)) ≪≫
           (colimitObjIsoColimitCompEvaluation _ _).symm)
@@ -240,7 +240,7 @@ variable [PreservesColimitsOfShape J (lim : (K ⥤ C) ⥤ _)]
 noncomputable instance : PreservesColimitsOfShape J (lim : (K ⥤ D ⥤ C) ⥤ _) :=
   preservesColimitsOfShape_of_evaluation _ _ (fun d =>
     let i : (lim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
-        limit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
+        limit ((postcompose K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (limitObjIsoLimitCompEvaluation _ _) ≪≫
           (by exact HasLimit.isoOfNatIso (Iso.refl _)) ≪≫
           (limitObjIsoLimitCompEvaluation _ _).symm)

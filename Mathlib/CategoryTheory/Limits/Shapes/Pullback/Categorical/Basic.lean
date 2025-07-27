@@ -32,7 +32,7 @@ equivalent to `CatCommSqOver F G X`.
   of the cospan of `F` and `G`.
 * `CategoricalPullback.functorEquiv F G X`: the equivalence of categories between functors
   `X ⥤ CategoricalPullback F G` and `CatCommSqOver F G X`, where the latter is an abbrev for
-  `CategoricalPullback (whiskeringRight X A B|>.obj F) (whiskeringRight X C B|>.obj G)`.
+  `CategoricalPullback (postcompose X A B|>.obj F) (postcompose X C B|>.obj G)`.
 
 ## References
 * [Kerodon: section 1.4.5.2](https://kerodon.net/tag/032Y)
@@ -195,11 +195,11 @@ variable (F G) in
 /-- The data of a categorical commutative square over a cospan `F, G` with cone point `X` is
 that of a functor `T : X ⥤ A`, a functor `L : X ⥤ C`, and a `CatCommSqOver T L F G`.
 Note that this is *exactly* what an object of
-`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)` is,
+`((postcompose X A B).obj F) ⊡ ((postcompose X C B).obj G)` is,
 so `CatCommSqOver F G X` is in fact an abbreviation for
-`((whiskeringRight X A B).obj F) ⊡ ((whiskeringRight X C B).obj G)`. -/
+`((postcompose X A B).obj F) ⊡ ((postcompose X C B).obj G)`. -/
 abbrev CatCommSqOver :=
-  (whiskeringRight X A B|>.obj F) ⊡ (whiskeringRight X C B|>.obj G)
+  (postcompose X A B|>.obj F) ⊡ (postcompose X C B|>.obj G)
 
 namespace CatCommSqOver
 
@@ -230,8 +230,8 @@ abbrev sndFunctor : CatCommSqOver F G X ⥤ X ⥤ C := π₂ _ _
 
 /-- The structure isompophism of a `CatCommSqOver` as a natural transformation. -/
 abbrev e :
-    fstFunctor F G X ⋙ (whiskeringRight X A B).obj F ≅
-    sndFunctor F G X ⋙ (whiskeringRight X C B).obj G :=
+    fstFunctor F G X ⋙ (postcompose X A B).obj F ≅
+    sndFunctor F G X ⋙ (postcompose X C B).obj G :=
   NatIso.ofComponents (fun S ↦ S.iso)
 
 end CatCommSqOver

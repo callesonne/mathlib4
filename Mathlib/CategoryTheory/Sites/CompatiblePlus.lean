@@ -163,8 +163,8 @@ theorem plusCompIso_whiskerRight {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) :
 /-- The isomorphism between `P⁺ ⋙ F` and `(P ⋙ F)⁺`, functorially in `P`. -/
 @[simps! hom_app inv_app]
 def plusFunctorWhiskerRightIso :
-    J.plusFunctor D ⋙ (whiskeringRight _ _ _).obj F ≅
-      (whiskeringRight _ _ _).obj F ⋙ J.plusFunctor E :=
+    J.plusFunctor D ⋙ (postcompose _ _ _).obj F ≅
+      (postcompose _ _ _).obj F ⋙ J.plusFunctor E :=
   NatIso.ofComponents (fun _ => J.plusCompIso _ _) @fun _ _ _ => plusCompIso_whiskerRight _ _ _
 
 @[reassoc (attr := simp)]

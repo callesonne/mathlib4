@@ -203,22 +203,22 @@ noncomputable instance : PreservesFiniteColimits (Ind.yoneda (C := C)) :=
 is the Yoneda embedding. It is known as "ind-lim" and denoted `“colim”` in [Kashiwara2006]. -/
 protected noncomputable def Ind.lim (I : Type v) [SmallCategory I] [IsFiltered I] :
     (I ⥤ C) ⥤ Ind C :=
-  (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim
+  (postcompose _ _ _).obj Ind.yoneda ⋙ colim
 
 /-- Computing ind-lims in `Ind C` is the same as computing them in `Cᵒᵖ ⥤ Type v`. -/
 noncomputable def Ind.limCompInclusion {I : Type v} [SmallCategory I] [IsFiltered I] :
-    Ind.lim I ⋙ Ind.inclusion C ≅ (whiskeringRight _ _ _).obj yoneda ⋙ colim := calc
+    Ind.lim I ⋙ Ind.inclusion C ≅ (postcompose _ _ _).obj yoneda ⋙ colim := calc
   Ind.lim I ⋙ Ind.inclusion C
-    ≅ (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim ⋙ Ind.inclusion C := Functor.associator _ _ _
-  _ ≅ (whiskeringRight _ _ _).obj Ind.yoneda ⋙
-      (whiskeringRight _ _ _).obj (Ind.inclusion C) ⋙ colim :=
+    ≅ (postcompose _ _ _).obj Ind.yoneda ⋙ colim ⋙ Ind.inclusion C := Functor.associator _ _ _
+  _ ≅ (postcompose _ _ _).obj Ind.yoneda ⋙
+      (postcompose _ _ _).obj (Ind.inclusion C) ⋙ colim :=
     isoWhiskerLeft _ (preservesColimitNatIso _)
-  _ ≅ ((whiskeringRight _ _ _).obj Ind.yoneda ⋙
-      (whiskeringRight _ _ _).obj (Ind.inclusion C)) ⋙ colim := (Functor.associator _ _ _).symm
-  _ ≅ (whiskeringRight _ _ _).obj (Ind.yoneda ⋙ Ind.inclusion C) ⋙ colim :=
-    isoWhiskerRight (whiskeringRightObjCompIso _ _) colim
-  _ ≅ (whiskeringRight _ _ _).obj yoneda ⋙ colim :=
-    isoWhiskerRight ((whiskeringRight _ _ _).mapIso (Ind.yonedaCompInclusion)) colim
+  _ ≅ ((postcompose _ _ _).obj Ind.yoneda ⋙
+      (postcompose _ _ _).obj (Ind.inclusion C)) ⋙ colim := (Functor.associator _ _ _).symm
+  _ ≅ (postcompose _ _ _).obj (Ind.yoneda ⋙ Ind.inclusion C) ⋙ colim :=
+    isoWhiskerRight (postcomposeObjCompIso _ _) colim
+  _ ≅ (postcompose _ _ _).obj yoneda ⋙ colim :=
+    isoWhiskerRight ((postcompose _ _ _).mapIso (Ind.yonedaCompInclusion)) colim
 
 instance {α : Type w} [SmallCategory α] [FinCategory α] [HasLimitsOfShape α C] {I : Type v}
     [SmallCategory I] [IsFiltered I] :
@@ -238,14 +238,14 @@ instance {α : Type v} [Finite α] [HasColimitsOfShape (Discrete α) C] :
   let I : α → Type v := fun s => (F.obj ⟨s⟩).presentation.I
   let G : ∀ s, I s ⥤ C := fun s => (F.obj ⟨s⟩).presentation.F
   let iso : Discrete.functor (fun s => Pi.eval I s ⋙ G s) ⋙
-      (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim ≅ F := by
+      (postcompose _ _ _).obj Ind.yoneda ⋙ colim ≅ F := by
     refine Discrete.natIso (fun s => ?_)
     refine (Functor.Final.colimitIso (Pi.eval I s.as) (G s.as ⋙ Ind.yoneda)) ≪≫ ?_
     exact Ind.colimitPresentationCompYoneda _
   -- The actual proof happens during typeclass resolution in the following line, which deduces
   -- ```
   -- HasColimit Discrete.functor (fun s => Pi.eval I s ⋙ G s) ⋙
-  --    (whiskeringRight _ _ _).obj Ind.yoneda ⋙ colim
+  --    (postcompose _ _ _).obj Ind.yoneda ⋙ colim
   -- ```
   -- from the fact that finite limits commute with filtered colimits and from the fact that
   -- `Ind.yoneda` preserves finite colimits.
@@ -262,7 +262,7 @@ noncomputable def IndParallelPairPresentation.parallelPairIsoParallelPairCompInd
     {A B : Ind C} {f g : A ⟶ B}
     (P : IndParallelPairPresentation ((Ind.inclusion _).map f) ((Ind.inclusion _).map g)) :
     parallelPair f g ≅ parallelPair P.φ P.ψ ⋙ Ind.lim P.I :=
-  ((whiskeringRight WalkingParallelPair _ _).obj (Ind.inclusion C)).preimageIso <|
+  ((postcompose WalkingParallelPair _ _).obj (Ind.inclusion C)).preimageIso <|
     diagramIsoParallelPair _ ≪≫
       P.parallelPairIsoParallelPairCompYoneda ≪≫
       isoWhiskerLeft (parallelPair _ _) Ind.limCompInclusion.symm

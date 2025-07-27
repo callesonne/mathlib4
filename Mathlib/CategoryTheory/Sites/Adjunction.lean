@@ -49,9 +49,9 @@ lemma adjunction_unit_app_val [HasWeakSheafify J D] [HasSheafCompose J F] (adj :
     (X : Sheaf J E) : ((adjunction J adj).unit.app X).val =
       (adj.whiskerRight Cᵒᵖ).unit.app _ ≫ whiskerRight (toSheafify J (X.val ⋙ G)) F  := by
   change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
-  simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
+  simp only [Functor.id_obj, Functor.comp_obj, postcompose_obj_obj, adjunction,
     Adjunction.map_restrictFullyFaithful_unit_app, Adjunction.comp_unit_app,
-    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, Iso.refl_hom, NatTrans.id_app,
+    sheafificationAdjunction_unit_app, postcompose_obj_map, Iso.refl_hom, NatTrans.id_app,
     Functor.comp_map, Functor.map_id, whiskerRight_id', Category.comp_id]
   rfl
 
@@ -60,9 +60,9 @@ lemma adjunction_counit_app_val [HasWeakSheafify J D] [HasSheafCompose J F] (adj
     (Y : Sheaf J D) : ((adjunction J adj).counit.app Y).val =
       sheafifyLift J (((adj.whiskerRight Cᵒᵖ).counit.app Y.val)) Y.cond := by
   change ((𝟭 (Sheaf _ _)).map ((adjunction J adj).counit.app Y)).val = _
-  simp only [Functor.comp_obj, sheafToPresheaf_obj, sheafCompose_obj_val, whiskeringRight_obj_obj,
+  simp only [Functor.comp_obj, sheafToPresheaf_obj, sheafCompose_obj_val, postcompose_obj_obj,
     adjunction, Adjunction.map_restrictFullyFaithful_counit_app, Iso.refl_inv, NatTrans.id_app,
-    Functor.comp_map, whiskeringRight_obj_map, Adjunction.comp_counit_app,
+    Functor.comp_map, postcompose_obj_map, Adjunction.comp_counit_app,
     comp_val, sheafificationAdjunction_counit_app_val,
     sheafifyMap_sheafifyLift, Functor.id_obj, whiskerRight_id', Category.comp_id, Category.id_comp]
 

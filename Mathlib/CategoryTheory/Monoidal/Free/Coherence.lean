@@ -148,7 +148,7 @@ def normalize : F C ⥤ N C ⥤ N C where
     form). -/
 @[simp]
 def normalize' : F C ⥤ N C ⥤ F C :=
-  normalize C ⋙ (whiskeringRight _ _ _).obj inclusion
+  normalize C ⋙ (postcompose _ _ _).obj inclusion
 
 /-- The normalization functor for the free monoidal category over `C`. -/
 def fullNormalize : F C ⥤ N C where

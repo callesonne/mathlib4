@@ -98,7 +98,7 @@ uses its definitional properties (TODO: figure out a way to avoid this).
 -/
 def natIsoOfRightAdjointNatIso {F F' : C ⥤ D} {G G' : D ⥤ C}
     (adj1 : F ⊣ G) (adj2 : F' ⊣ G') (r : G ≅ G') : F ≅ F' :=
-  NatIso.removeOp ((Coyoneda.fullyFaithful.whiskeringRight _).isoEquiv.symm
+  NatIso.removeOp ((Coyoneda.fullyFaithful.postcompose _).isoEquiv.symm
     (leftAdjointsCoyonedaEquiv adj2 (adj1.ofNatIsoRight r)))
 
 /-- Given two adjunctions, if the left adjoints are naturally isomorphic, then so are the right

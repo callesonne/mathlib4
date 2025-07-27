@@ -167,14 +167,14 @@ def functorExtension₁Comp (F : C ⥤ Karoubi D) (G : D ⥤ Karoubi E) :
 /-- The canonical functor `(C ⥤ D) ⥤ (Karoubi C ⥤ Karoubi D)` -/
 @[simps!]
 def functorExtension₂ : (C ⥤ D) ⥤ Karoubi C ⥤ Karoubi D :=
-  (whiskeringRight C D (Karoubi D)).obj (toKaroubi D) ⋙ functorExtension₁ C D
+  (postcompose C D (Karoubi D)).obj (toKaroubi D) ⋙ functorExtension₁ C D
 
 /-- The natural isomorphism expressing that functors `Karoubi C ⥤ Karoubi D` obtained
 using `functorExtension₂` actually extends the original functors `C ⥤ D`. -/
 @[simps!]
 def functorExtension₂CompWhiskeringLeftToKaroubiIso :
     functorExtension₂ C D ⋙ (whiskeringLeft C (Karoubi C) (Karoubi D)).obj (toKaroubi C) ≅
-      (whiskeringRight C D (Karoubi D)).obj (toKaroubi D) :=
+      (postcompose C D (Karoubi D)).obj (toKaroubi D) :=
   NatIso.ofComponents
     (fun F => NatIso.ofComponents
       (fun X =>
@@ -205,7 +205,7 @@ when `D` is idempotent complete. -/
 @[simps!]
 noncomputable def functorExtension : (C ⥤ D) ⥤ Karoubi C ⥤ D :=
   functorExtension₂ C D ⋙
-    (whiskeringRight (Karoubi C) (Karoubi D) D).obj (toKaroubiEquivalence D).inverse
+    (postcompose (Karoubi C) (Karoubi D) D).obj (toKaroubiEquivalence D).inverse
 
 /-- The equivalence `(C ⥤ D) ≌ (Karoubi C ⥤ D)` when `D` is idempotent complete. -/
 @[simp]
@@ -221,13 +221,13 @@ noncomputable instance : (functorExtension C D).IsEquivalence := by
 
 instance : ((whiskeringLeft C (Karoubi C) D).obj (toKaroubi C)).IsEquivalence := by
   have : ((whiskeringLeft C (Karoubi C) D).obj (toKaroubi C) ⋙
-    (whiskeringRight C D (Karoubi D)).obj (toKaroubi D) ⋙
-    (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D))).IsEquivalence := by
+    (postcompose C D (Karoubi D)).obj (toKaroubi D) ⋙
+    (postcompose C (Karoubi D) D).obj (Functor.inv (toKaroubi D))).IsEquivalence := by
     change (karoubiUniversal C D).inverse.IsEquivalence
     infer_instance
   exact Functor.isEquivalence_of_comp_right _
-    ((whiskeringRight C _ _).obj (toKaroubi D) ⋙
-      (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D)))
+    ((postcompose C _ _).obj (toKaroubi D) ⋙
+      (postcompose C (Karoubi D) D).obj (Functor.inv (toKaroubi D)))
 
 variable {C D}
 

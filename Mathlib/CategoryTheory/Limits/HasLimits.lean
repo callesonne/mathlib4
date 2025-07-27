@@ -499,7 +499,7 @@ and cones over `F` with cone point `W`
 is natural in `F`.
 -/
 def limYoneda :
-    lim ⋙ yoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ≅ CategoryTheory.cones J C :=
+    lim ⋙ yoneda ⋙ (postcompose _ _ _).obj uliftFunctor.{u₁} ≅ CategoryTheory.cones J C :=
   NatIso.ofComponents fun F => NatIso.ofComponents fun W => limit.homIso F (unop W)
 
 /-- The constant functor and limit functor are adjoint to each other -/
@@ -1043,7 +1043,7 @@ morphisms from the cone point of the colimit cocone for `F` to `W`
 and cocones over `F` with cone point `W`
 is natural in `F`.
 -/
-def colimCoyoneda : colim.op ⋙ coyoneda ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁}
+def colimCoyoneda : colim.op ⋙ coyoneda ⋙ (postcompose _ _ _).obj uliftFunctor.{u₁}
     ≅ CategoryTheory.cocones J C :=
   NatIso.ofComponents fun F => NatIso.ofComponents fun W => colimit.homIso (unop F) W
 

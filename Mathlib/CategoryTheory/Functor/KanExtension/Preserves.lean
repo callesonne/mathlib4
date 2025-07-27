@@ -268,7 +268,7 @@ abbrev PreservesPointwiseLeftKanExtensions :=
 def lanCompIsoOfPreserves [G.PreservesLeftKanExtensions L]
     [∀ F : A ⥤ B, HasLeftKanExtension L F]
     [∀ F : A ⥤ D, HasLeftKanExtension L F] :
-    L.lan ⋙ (whiskeringRight _ _ _).obj G ≅ (whiskeringRight _ _ _).obj G ⋙ L.lan :=
+    L.lan ⋙ (postcompose _ _ _).obj G ≅ (postcompose _ _ _).obj G ⋙ L.lan :=
   NatIso.ofComponents (fun F ↦ leftKanExtensionCompIsoOfPreserves _ _ _)
     (fun {F F'} η ↦ by
       apply hom_ext_of_isLeftKanExtension (L.leftKanExtension F ⋙ G)
@@ -513,7 +513,7 @@ abbrev PreservesPointwiseRightKanExtensions :=
 @[simps!]
 def ranCompIsoOfPreserves [G.PreservesRightKanExtensions L]
     [∀ F : A ⥤ B, HasRightKanExtension L F] [∀ F : A ⥤ D, HasRightKanExtension L F] :
-    L.ran ⋙ (whiskeringRight _ _ _).obj G ≅ (whiskeringRight _ _ _).obj G ⋙ L.ran :=
+    L.ran ⋙ (postcompose _ _ _).obj G ≅ (postcompose _ _ _).obj G ⋙ L.ran :=
   NatIso.ofComponents (fun F ↦ rightKanExtensionCompIsoOfPreserves _ _ _)
     (fun {F F'} η ↦ by
       apply hom_ext_of_isRightKanExtension

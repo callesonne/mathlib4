@@ -42,7 +42,7 @@ def singularChainComplexFunctor :
 /-- The `n`-th singular homology functor with coefficients in `C`. -/
 def singularHomologyFunctor : C ⥤ TopCat.{0} ⥤ C :=
   singularChainComplexFunctor C ⋙
-    (Functor.whiskeringRight _ _ _).obj (HomologicalComplex.homologyFunctor _ _ n)
+    (Functor.postcompose _ _ _).obj (HomologicalComplex.homologyFunctor _ _ n)
 
 section TotallyDisconnectedSpace
 

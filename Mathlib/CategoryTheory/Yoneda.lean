@@ -594,7 +594,7 @@ def curriedYonedaLemma {C : Type u₁} [SmallCategory C] :
 /-- The curried version of the Yoneda lemma. -/
 def largeCurriedYonedaLemma {C : Type u₁} [Category.{v₁} C] :
     yoneda.op ⋙ coyoneda ≅
-      evaluation Cᵒᵖ (Type v₁) ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} :=
+      evaluation Cᵒᵖ (Type v₁) ⋙ (postcompose _ _ _).obj uliftFunctor.{u₁} :=
   NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| yonedaEquiv.trans Equiv.ulift.symm)
@@ -770,7 +770,7 @@ def curriedCoyonedaLemma {C : Type u₁} [SmallCategory C] :
 /-- The curried version of the Coyoneda lemma. -/
 def largeCurriedCoyonedaLemma {C : Type u₁} [Category.{v₁} C] :
     (coyoneda.rightOp ⋙ coyoneda) ≅
-      evaluation C (Type v₁) ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} :=
+      evaluation C (Type v₁) ⋙ (postcompose _ _ _).obj uliftFunctor.{u₁} :=
   NatIso.ofComponents
     (fun X => NatIso.ofComponents
       (fun _ => Equiv.toIso <| coyonedaEquiv.trans Equiv.ulift.symm)
@@ -899,8 +899,8 @@ def homNatIsoMaxRight {D : Type u₂} [Category.{max v₁ v₂} D] {F : C ⥤ D}
 @[simps!]
 def compYonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C ⥤ D}
     (hF : F.FullyFaithful) : F ⋙ yoneda ⋙ (whiskeringLeft _ _ _).obj F.op ⋙
-      (Functor.whiskeringRight _ _ _).obj uliftFunctor.{v₁} ≅
-      yoneda ⋙ (Functor.whiskeringRight _ _ _).obj uliftFunctor.{v₂} :=
+      (Functor.postcompose _ _ _).obj uliftFunctor.{v₁} ≅
+      yoneda ⋙ (Functor.postcompose _ _ _).obj uliftFunctor.{v₂} :=
   NatIso.ofComponents (fun X => hF.homNatIso _)
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
 
@@ -908,7 +908,7 @@ def compYonedaCompWhiskeringLeft {D : Type u₂} [Category.{v₂} D] {F : C ⥤ 
 @[simps!]
 def compYonedaCompWhiskeringLeftMaxRight {D : Type u₂} [Category.{max v₁ v₂} D] {F : C ⥤ D}
     (hF : F.FullyFaithful) : F ⋙ yoneda ⋙ (whiskeringLeft _ _ _).obj F.op ≅
-      yoneda ⋙ (Functor.whiskeringRight _ _ _).obj uliftFunctor.{v₂} :=
+      yoneda ⋙ (Functor.postcompose _ _ _).obj uliftFunctor.{v₂} :=
   NatIso.ofComponents (fun X => hF.homNatIsoMaxRight _)
     (fun f => by ext; exact Equiv.ulift.injective (hF.map_injective (by simp)))
 

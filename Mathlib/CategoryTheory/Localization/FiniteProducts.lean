@@ -45,28 +45,28 @@ It is induced by `lim ⋙ L : (Discrete J ⥤ C) ⥤ D`. -/
 noncomputable abbrev limitFunctor :
     (Discrete J ⥤ D) ⥤ D :=
   Localization.lift _ (inverts L W J)
-    ((whiskeringRight (Discrete J) C D).obj L)
+    ((postcompose (Discrete J) C D).obj L)
 
 /-- The functor `limitFunctor L W J` is induced by `lim ⋙ L`. -/
 noncomputable def compLimitFunctorIso :
-    ((whiskeringRight (Discrete J) C D).obj L) ⋙ limitFunctor L W J ≅
+    ((postcompose (Discrete J) C D).obj L) ⋙ limitFunctor L W J ≅
       lim ⋙ L := by
   apply Localization.fac
 
 instance :
     CatCommSq (Functor.const (Discrete J)) L
-      ((whiskeringRight (Discrete J) C D).obj L) (Functor.const (Discrete J)) where
+      ((postcompose (Discrete J) C D).obj L) (Functor.const (Discrete J)) where
   iso := (Functor.compConstIso _ _).symm
 
 noncomputable instance :
-    CatCommSq lim ((whiskeringRight (Discrete J) C D).obj L) L (limitFunctor L W J) where
+    CatCommSq lim ((postcompose (Discrete J) C D).obj L) L (limitFunctor L W J) where
   iso := (compLimitFunctorIso L W J).symm
 
 /-- The adjunction between the constant functor `D ⥤ (Discrete J ⥤ D)`
 and `limitFunctor L W J`. -/
 noncomputable def adj :
     Functor.const _ ⊣ limitFunctor L W J :=
-  constLimAdj.localization L W ((whiskeringRight (Discrete J) C D).obj L)
+  constLimAdj.localization L W ((postcompose (Discrete J) C D).obj L)
     (W.functorCategory (Discrete J)) (Functor.const _) (limitFunctor L W J)
 
 lemma adj_counit_app (F : Discrete J ⥤ C) :

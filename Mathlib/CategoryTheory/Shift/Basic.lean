@@ -669,7 +669,7 @@ namespace hasShift
 
 /-- auxiliary definition for `FullyFaithful.hasShift` -/
 def zero : s 0 ≅ 𝟭 C :=
-  (hF.whiskeringRight C).preimageIso ((i 0) ≪≫ isoWhiskerLeft F (shiftFunctorZero D A) ≪≫
+  (hF.postcompose C).preimageIso ((i 0) ≪≫ isoWhiskerLeft F (shiftFunctorZero D A) ≪≫
     rightUnitor _ ≪≫ (leftUnitor _).symm)
 
 @[simp]
@@ -686,7 +686,7 @@ lemma map_zero_inv_app (X : C) :
 
 /-- auxiliary definition for `FullyFaithful.hasShift` -/
 def add (a b : A) : s (a + b) ≅ s a ⋙ s b :=
-  (hF.whiskeringRight C).preimageIso (i (a + b) ≪≫ isoWhiskerLeft _ (shiftFunctorAdd D a b) ≪≫
+  (hF.postcompose C).preimageIso (i (a + b) ≪≫ isoWhiskerLeft _ (shiftFunctorAdd D a b) ≪≫
       (associator _ _ _).symm ≪≫ (isoWhiskerRight (i a).symm _) ≪≫
       associator _ _ _ ≪≫ (isoWhiskerLeft _ (i b).symm) ≪≫
       (associator _ _ _).symm)

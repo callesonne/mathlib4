@@ -22,10 +22,10 @@ open CategoryTheory Functor
 variable (C : Type*) {D E : Type*} [Category C] [Category D] [Category E] {F : D ⥤ E} {G : E ⥤ D}
 
 /-- Given an adjunction `F ⊣ G`, this provides the natural adjunction
-  `(whiskeringRight C _ _).obj F ⊣ (whiskeringRight C _ _).obj G`. -/
+  `(postcompose C _ _).obj F ⊣ (postcompose C _ _).obj G`. -/
 @[simps! unit_app_app counit_app_app]
 protected def whiskerRight (adj : F ⊣ G) :
-    (whiskeringRight C D E).obj F ⊣ (whiskeringRight C E D).obj G where
+    (postcompose C D E).obj F ⊣ (postcompose C E D).obj G where
   unit :=
     { app := fun X =>
         (rightUnitor _).inv ≫ whiskerLeft X adj.unit ≫ (associator _ _ _).inv

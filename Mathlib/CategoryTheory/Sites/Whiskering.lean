@@ -50,10 +50,10 @@ def sheafCompose : Sheaf J A ⥤ Sheaf J B where
   map_comp _ _ := Sheaf.Hom.ext <| whiskerRight_comp _ _ _
 
 instance [F.Faithful] : (sheafCompose J F ⋙ sheafToPresheaf _ _).Faithful :=
-  show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Faithful from inferInstance
+  show (sheafToPresheaf _ _ ⋙ (postcompose Cᵒᵖ A B).obj F).Faithful from inferInstance
 
 instance [F.Faithful] [F.Full] : (sheafCompose J F ⋙ sheafToPresheaf _ _).Full :=
-  show (sheafToPresheaf _ _ ⋙ (whiskeringRight Cᵒᵖ A B).obj F).Full from inferInstance
+  show (sheafToPresheaf _ _ ⋙ (postcompose Cᵒᵖ A B).obj F).Full from inferInstance
 
 instance [F.Faithful] : (sheafCompose J F).Faithful :=
   Functor.Faithful.of_comp (sheafCompose J F) (sheafToPresheaf _ _)
@@ -64,7 +64,7 @@ instance [F.Full] [F.Faithful] : (sheafCompose J F).Full :=
 instance [F.ReflectsIsomorphisms] : (sheafCompose J F).ReflectsIsomorphisms where
   reflects {G₁ G₂} f _ := by
     rw [← isIso_iff_of_reflects_iso _ (sheafToPresheaf _ _),
-      ← isIso_iff_of_reflects_iso _ ((whiskeringRight Cᵒᵖ A B).obj F)]
+      ← isIso_iff_of_reflects_iso _ ((postcompose Cᵒᵖ A B).obj F)]
     change IsIso ((sheafToPresheaf _ _).map ((sheafCompose J F).map f))
     infer_instance
 

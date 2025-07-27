@@ -113,9 +113,9 @@ lemma HasExactLimitsOfShape.domain_of_functor {D : Type*} (J : Type*) [Category 
         ((_ ⋙ lim).mapCocone c) _ ?_) (isColimitOfPreserves _ hc)
       refine Cocones.ext ((preservesLimitNatIso F).symm.app _) fun i ↦ ?_
       simp only [Functor.comp_obj, lim_obj, Functor.mapCocone_pt, isoWhiskerLeft_inv, Iso.symm_inv,
-        Cocones.precompose_obj_pt, whiskeringRight_obj_obj, Functor.const_obj_obj,
+        Cocones.precompose_obj_pt, postcompose_obj_obj, Functor.const_obj_obj,
         Cocones.precompose_obj_ι, NatTrans.comp_app, whiskerLeft_app, preservesLimitNatIso_hom_app,
-        Functor.mapCocone_ι_app, Functor.comp_map, whiskeringRight_obj_map, lim_map, Iso.app_hom,
+        Functor.mapCocone_ι_app, Functor.comp_map, postcompose_obj_map, lim_map, Iso.app_hom,
         Iso.symm_hom, preservesLimitNatIso_inv_app, Category.assoc]
       rw [← Iso.eq_inv_comp]
       exact (preservesLimitNatIso F).inv.naturality _ } } }
@@ -182,11 +182,11 @@ lemma hasExactColimitsOfShape (adj : F ⊣ G) [G.Full] [G.Faithful]
   preservesFiniteLimits := ⟨fun K _ _ ↦ ⟨fun {H} ↦ by
     have : PreservesLimitsOfSize.{0, 0} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{v', u'} F := adj.leftAdjoint_preservesColimits
-    let e : (whiskeringRight J D C).obj G ⋙ colim ⋙ F ≅ colim :=
+    let e : (postcompose J D C).obj G ⋙ colim ⋙ F ≅ colim :=
       isoWhiskerLeft _ (preservesColimitNatIso F) ≪≫ (Functor.associator _ _ _).symm ≪≫
-        isoWhiskerRight (whiskeringRightObjCompIso G F) _ ≪≫
-        isoWhiskerRight ((whiskeringRight J D D).mapIso (asIso adj.counit)) _ ≪≫
-        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ colim.leftUnitor
+        isoWhiskerRight (postcomposeObjCompIso G F) _ ≪≫
+        isoWhiskerRight ((postcompose J D D).mapIso (asIso adj.counit)) _ ≪≫
+        isoWhiskerRight postcomposeObjIdIso _ ≪≫ colim.leftUnitor
     exact preservesLimit_of_natIso _ e⟩⟩
 
 /-- Let `adj : F ⊣ G` be an adjunction, with `F : C ⥤ D` coreflective.
@@ -199,12 +199,12 @@ lemma hasExactLimitsOfShape (adj : F ⊣ G) [F.Full] [F.Faithful]
   preservesFiniteColimits:= ⟨fun K _ _ ↦ ⟨fun {H} ↦ by
     have : PreservesLimitsOfSize.{v', u'} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{0, 0} F := adj.leftAdjoint_preservesColimits
-    let e : (whiskeringRight J _ _).obj F ⋙ lim ⋙ G ≅ lim :=
+    let e : (postcompose J _ _).obj F ⋙ lim ⋙ G ≅ lim :=
       isoWhiskerLeft _ (preservesLimitNatIso G) ≪≫
         (Functor.associator _ _ _).symm ≪≫
-        isoWhiskerRight (whiskeringRightObjCompIso F G) _ ≪≫
-        isoWhiskerRight ((whiskeringRight J C C).mapIso (asIso adj.unit).symm) _ ≪≫
-        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ lim.leftUnitor
+        isoWhiskerRight (postcomposeObjCompIso F G) _ ≪≫
+        isoWhiskerRight ((postcompose J C C).mapIso (asIso adj.unit).symm) _ ≪≫
+        isoWhiskerRight postcomposeObjIdIso _ ≪≫ lim.leftUnitor
     exact preservesColimit_of_natIso _ e⟩⟩
 
 end Adjunction

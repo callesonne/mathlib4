@@ -45,7 +45,7 @@ noncomputable def yonedaYonedaColimit :
     ≅ colimit F ⋙ uliftFunctor.{u₁} := yonedaOpCompYonedaObj (colimit F)
   _ ≅ F.flip ⋙ colim ⋙ uliftFunctor.{u₁} :=
         isoWhiskerRight (colimitIsoFlipCompColim F) uliftFunctor.{u₁}
-  _ ≅ F.flip ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ⋙ colim :=
+  _ ≅ F.flip ⋙ (postcompose _ _ _).obj uliftFunctor.{u₁} ⋙ colim :=
         isoWhiskerLeft F.flip (preservesColimitNatIso uliftFunctor.{u₁})
   _ ≅ (yoneda.op ⋙ coyoneda ⋙ (whiskeringLeft _ _ _).obj F) ⋙ colim := isoWhiskerRight
         (isoWhiskerRight largeCurriedYonedaLemma.symm ((whiskeringLeft _ _ _).obj F)) colim

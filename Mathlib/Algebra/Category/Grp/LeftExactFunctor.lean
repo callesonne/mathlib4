@@ -50,7 +50,7 @@ private noncomputable local instance : BraidedCategory C := .ofCartesianMonoidal
 noncomputable def inverseAux : (C ⥤ₗ Type v) ⥤ C ⥤ AddCommGrp.{v} :=
   Functor.mapCommGrpFunctor ⋙
     (Functor.whiskeringLeft _ _ _).obj Preadditive.commGrpEquivalence.functor ⋙
-      (Functor.whiskeringRight _ _ _).obj
+      (Functor.postcompose _ _ _).obj
         (commGrpTypeEquivalenceCommGrp.functor ⋙ commGroupAddCommGroupEquivalence.functor)
 
 instance (F : C ⥤ₗ Type v) : PreservesFiniteLimits (inverseAux.obj F) where
@@ -89,7 +89,7 @@ noncomputable def unitIsoAux (F : C ⥤ AddCommGrp.{v}) [PreservesFiniteLimits F
 
 /-- Implementation, see `leftExactFunctorForgetEquivalence`. -/
 noncomputable def unitIso : 𝟭 (C ⥤ₗ AddCommGrp) ≅
-    (LeftExactFunctor.whiskeringRight _ _ _).obj (LeftExactFunctor.of (forget _)) ⋙ inverse :=
+    (LeftExactFunctor.postcompose _ _ _).obj (LeftExactFunctor.of (forget _)) ⋙ inverse :=
   NatIso.ofComponents (fun F => InducedCategory.isoMk (NatIso.ofComponents (fun X =>
     commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
       (CommGrp.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app
@@ -103,7 +103,7 @@ variable (C) in
 /-- If `C` is an additive category, the forgetful functor `(C ⥤ₗ AddCommGroup) ⥤ (C ⥤ₗ Type v)` is
 an equivalence. -/
 noncomputable def leftExactFunctorForgetEquivalence : (C ⥤ₗ AddCommGrp.{v}) ≌ (C ⥤ₗ Type v) where
-  functor := (LeftExactFunctor.whiskeringRight _ _ _).obj (LeftExactFunctor.of (forget _))
+  functor := (LeftExactFunctor.postcompose _ _ _).obj (LeftExactFunctor.of (forget _))
   inverse := leftExactFunctorForgetEquivalence.inverse
   unitIso := leftExactFunctorForgetEquivalence.unitIso
   counitIso := Iso.refl _

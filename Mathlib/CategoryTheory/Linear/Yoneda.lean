@@ -58,38 +58,38 @@ instance linearCoyoneda_obj_additive (Y : Cᵒᵖ) : ((linearCoyoneda R C).obj Y
 
 @[simp]
 theorem whiskering_linearYoneda :
-    linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = yoneda :=
+    linearYoneda R C ⋙ (postcompose _ _ _).obj (forget (ModuleCat.{v} R)) = yoneda :=
   rfl
 
 @[simp]
 theorem whiskering_linearYoneda₂ :
-    linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrp.{v}) =
+    linearYoneda R C ⋙ (postcompose _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrp.{v}) =
       preadditiveYoneda :=
   rfl
 
 @[simp]
 theorem whiskering_linearCoyoneda :
-    linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = coyoneda :=
+    linearCoyoneda R C ⋙ (postcompose _ _ _).obj (forget (ModuleCat.{v} R)) = coyoneda :=
   rfl
 
 @[simp]
 theorem whiskering_linearCoyoneda₂ :
     linearCoyoneda R C ⋙
-        (whiskeringRight _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrp.{v}) =
+        (postcompose _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrp.{v}) =
       preadditiveCoyoneda :=
   rfl
 
 instance full_linearYoneda : (linearYoneda R C).Full :=
-  let _ :  Functor.Full (linearYoneda R C ⋙ (whiskeringRight _ _ _).obj
+  let _ :  Functor.Full (linearYoneda R C ⋙ (postcompose _ _ _).obj
     (forget (ModuleCat.{v} R))) := Yoneda.yoneda_full
   Functor.Full.of_comp_faithful (linearYoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
+    ((postcompose _ _ _).obj (forget (ModuleCat.{v} R)))
 
 instance full_linearCoyoneda : (linearCoyoneda R C).Full :=
-  let _ : Functor.Full (linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj
+  let _ : Functor.Full (linearCoyoneda R C ⋙ (postcompose _ _ _).obj
     (forget (ModuleCat.{v} R))) := Coyoneda.coyoneda_full
   Functor.Full.of_comp_faithful (linearCoyoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
+    ((postcompose _ _ _).obj (forget (ModuleCat.{v} R)))
 
 instance faithful_linearYoneda : (linearYoneda R C).Faithful :=
   Functor.Faithful.of_comp_eq (whiskering_linearYoneda R C)

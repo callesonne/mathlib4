@@ -92,7 +92,7 @@ variable (R) in
 /-- The free presheaf of modules functor is left adjoint to the forget functor
 `PresheafOfModules.{u} R ⥤ Cᵒᵖ ⥤ Type u`. -/
 noncomputable def freeAdjunction :
-    free.{u} R ⊣ (toPresheaf R ⋙ (Functor.whiskeringRight _ _ _).obj (forget Ab)) :=
+    free.{u} R ⊣ (toPresheaf R ⋙ (Functor.postcompose _ _ _).obj (forget Ab)) :=
   Adjunction.mkOfHomEquiv
     { homEquiv := fun _ _ ↦ freeHomEquiv
       homEquiv_naturality_left_symm := fun {F₁ F₂ G} f g ↦

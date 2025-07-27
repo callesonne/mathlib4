@@ -133,13 +133,17 @@ def uncurryObjFlip (F : C ⥤ D ⥤ E) : uncurry.obj F.flip ≅ Prod.swap _ _ �
 
 variable (B C D E)
 
-/-- A version of `CategoryTheory.whiskeringRight` for bifunctors, obtained by uncurrying,
-applying `whiskeringRight` and currying back
+/-- A version of `CategoryTheory.postcompose` given by postcomposing a pair of functors with a
+bifunctor. In other words, this is the functor `(C ⥤ D ⥤ E) ⥤ (B ⥤ C) ⥤ (B ⥤ D) ⥤ B ⥤ E` that on
+objects postcomposes a pair of functors `F : B ⥤ C` and `G : B ⥤ D` with a bifunctor
+`H : C ⥤ D ⥤ E`.
+
+It is obtained by uncurrying, applying `postcompose` and currying back.
 -/
 @[simps!]
-def whiskeringRight₂ : (C ⥤ D ⥤ E) ⥤ (B ⥤ C) ⥤ (B ⥤ D) ⥤ B ⥤ E :=
+def postcomposePair : (C ⥤ D ⥤ E) ⥤ (B ⥤ C) ⥤ (B ⥤ D) ⥤ B ⥤ E :=
   uncurry ⋙
-    whiskeringRight _ _ _ ⋙ (whiskeringLeft _ _ _).obj (prodFunctorToFunctorProd _ _ _) ⋙ curry
+    postcompose _ _ _ ⋙ (whiskeringLeft _ _ _).obj (prodFunctorToFunctorProd _ _ _) ⋙ curry
 
 variable {B C D E}
 
@@ -188,11 +192,11 @@ lemma comp_flip_uncurry_eq (F : B ⥤ D) (G : D ⥤ C ⥤ E) :
 /-- Natural isomorphism witnessing `comp_flip_curry_eq`. -/
 @[simps!]
 def curryObjCompIso (F : C × B ⥤ D) (G : D ⥤ E) :
-    (curry.obj (F ⋙ G)).flip ≅ (curry.obj F).flip ⋙ (whiskeringRight _ _ _).obj G := .refl _
+    (curry.obj (F ⋙ G)).flip ≅ (curry.obj F).flip ⋙ (postcompose _ _ _).obj G := .refl _
 
 lemma curry_obj_comp_flip (F : C × B ⥤ D) (G : D ⥤ E) :
     (curry.obj (F ⋙ G)).flip =
-      (curry.obj F).flip ⋙ (whiskeringRight _ _ _).obj G := rfl
+      (curry.obj F).flip ⋙ (postcompose _ _ _).obj G := rfl
 
 /-- The equivalence of types of bifunctors giving by flipping the arguments. -/
 @[simps!]

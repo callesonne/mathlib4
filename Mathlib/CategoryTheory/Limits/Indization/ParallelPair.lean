@@ -155,7 +155,7 @@ namespace IndParallelPairPresentation
 as the colimit of `(P.φ, P.ψ)` in `Cᵒᵖ ⥤ Type v`. -/
 noncomputable def parallelPairIsoParallelPairCompYoneda {A B : Cᵒᵖ ⥤ Type v₁} {f g : A ⟶ B}
     (P : IndParallelPairPresentation f g) :
-    parallelPair f g ≅ parallelPair P.φ P.ψ ⋙ (whiskeringRight _ _ _).obj yoneda ⋙ colim :=
+    parallelPair f g ≅ parallelPair P.φ P.ψ ⋙ (postcompose _ _ _).obj yoneda ⋙ colim :=
   parallelPair.ext
     (P.isColimit₁.coconePointUniqueUpToIso (colimit.isColimit _))
     (P.isColimit₂.coconePointUniqueUpToIso (colimit.isColimit _))

@@ -212,7 +212,7 @@ variable (C)
 /-- Functor composition induces a functor on simplicial objects. -/
 @[simps!]
 def whiskering (D : Type*) [Category D] : (C ⥤ D) ⥤ SimplicialObject C ⥤ SimplicialObject D :=
-  whiskeringRight _ _ _
+  postcompose _ _ _
 
 /-- Truncated simplicial objects. -/
 def Truncated (n : ℕ) :=
@@ -246,7 +246,7 @@ variable (C) in
 /-- Functor composition induces a functor on truncated simplicial objects. -/
 @[simps!]
 def whiskering {n} (D : Type*) [Category D] : (C ⥤ D) ⥤ Truncated C n ⥤ Truncated D n :=
-  whiskeringRight _ _ _
+  postcompose _ _ _
 
 open Mathlib.Tactic (subscriptTerm) in
 /-- For `X : Truncated C n` and `m ≤ n`, `X _⦋m⦌ₙ` is the `m`-th term of X. The
@@ -676,7 +676,7 @@ variable (C)
 /-- Functor composition induces a functor on cosimplicial objects. -/
 @[simps!]
 def whiskering (D : Type*) [Category D] : (C ⥤ D) ⥤ CosimplicialObject C ⥤ CosimplicialObject D :=
-  whiskeringRight _ _ _
+  postcompose _ _ _
 
 /-- Truncated cosimplicial objects. -/
 def Truncated (n : ℕ) :=
@@ -710,7 +710,7 @@ variable (C) in
 /-- Functor composition induces a functor on truncated cosimplicial objects. -/
 @[simps!]
 def whiskering {n} (D : Type*) [Category D] : (C ⥤ D) ⥤ Truncated C n ⥤ Truncated D n :=
-  whiskeringRight _ _ _
+  postcompose _ _ _
 
 open Mathlib.Tactic (subscriptTerm) in
 /-- For `X : Truncated C n` and `m ≤ n`, `X ^⦋m⦌ₙ` is the `m`-th term of X. The

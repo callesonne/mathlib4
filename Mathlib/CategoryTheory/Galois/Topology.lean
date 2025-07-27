@@ -121,8 +121,8 @@ instance continuousSMul_aut_fiber (X : C) : ContinuousSMul (Aut F) (F.obj X) whe
 
 /-- If `G` is a functor of categories of finite types, the induced map `Aut F → Aut (F ⋙ G)` is
 continuous. -/
-lemma continuous_mapAut_whiskeringRight (G : FintypeCat.{w} ⥤ FintypeCat.{v}) :
-    Continuous (((whiskeringRight _ _ _).obj G).mapAut F) := by
+lemma continuous_mapAut_postcompose (G : FintypeCat.{w} ⥤ FintypeCat.{v}) :
+    Continuous (((postcompose _ _ _).obj G).mapAut F) := by
   rw [Topology.IsInducing.continuous_iff (autEmbedding_isClosedEmbedding _).isInducing,
     continuous_pi_iff]
   intro X
@@ -134,11 +134,11 @@ topological groups `Aut F ≃ Aut (F ⋙ G)`. -/
 noncomputable def autEquivAutWhiskerRight {G : FintypeCat.{w} ⥤ FintypeCat.{v}}
     (h : G.FullyFaithful) :
     Aut F ≃ₜ* Aut (F ⋙ G) where
-  __ := (h.whiskeringRight C).autMulEquivOfFullyFaithful F
-  continuous_toFun := continuous_mapAut_whiskeringRight F G
+  __ := (h.postcompose C).autMulEquivOfFullyFaithful F
+  continuous_toFun := continuous_mapAut_postcompose F G
   continuous_invFun := Continuous.continuous_symm_of_equiv_compact_to_t2
-    (f := ((h.whiskeringRight C).autMulEquivOfFullyFaithful F).toEquiv)
-    (continuous_mapAut_whiskeringRight F G)
+    (f := ((h.postcompose C).autMulEquivOfFullyFaithful F).toEquiv)
+    (continuous_mapAut_postcompose F G)
 
 variable [GaloisCategory C] [FiberFunctor F]
 

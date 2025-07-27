@@ -397,8 +397,8 @@ on the right. -/
 @[simps!]
 def LeftExtension.postcompose₂ : LeftExtension L F ⥤ LeftExtension L (F ⋙ G) :=
   StructuredArrow.map₂
-    (F := (whiskeringRight _ _ _).obj G)
-    (G := (whiskeringRight _ _ _).obj G)
+    (F := (postcompose _ _ _).obj G)
+    (G := (postcompose _ _ _).obj G)
     (𝟙 _) ({app _ := (associator _ _ _).hom})
 
 /-- Given a right extension `E` of `F : C ⥤ H` along `L : C ⥤ D` and a functor `G : H ⥤ D'`,
@@ -407,8 +407,8 @@ on the right. -/
 @[simps!]
 def RightExtension.postcompose₂ : RightExtension L F ⥤ RightExtension L (F ⋙ G) :=
   CostructuredArrow.map₂
-    (F := (whiskeringRight _ _ _).obj G)
-    (G := (whiskeringRight _ _ _).obj G)
+    (F := (postcompose _ _ _).obj G)
+    (G := (postcompose _ _ _).obj G)
     ({app _ := associator _ _ _|>.inv}) (𝟙 _)
 
 variable {L F} {F' : D ⥤ H}

@@ -88,7 +88,7 @@ a functor from the groupoid to `C`, simply by composing with the embedding `Core
 -/
 @[simps!]
 def forgetFunctorToCore : (G ⥤ Core C) ⥤ G ⥤ C :=
-  (whiskeringRight _ _ _).obj (inclusion C)
+  (postcompose _ _ _).obj (inclusion C)
 
 end Core
 
