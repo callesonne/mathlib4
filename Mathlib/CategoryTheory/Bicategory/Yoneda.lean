@@ -101,7 +101,38 @@ It consists of the following:
 /-   mapId a := isoMk (fun b => leftUnitorNatIso a b) -/
 /-   mapComp f g := (isoMk (fun b ↦ associatorNatIsoRight f g b)) -/
 
-@[simps!]
+
+-- TODO: state cat-level equivalence without universe assumptions
+
+def yonedaEquiv [LocallySmallBicategory B] (P : Pseudofunctor Bᵒᵖ Cat.{u₁, u₁}) (a : Bᵒᵖ) :
+    (yoneda.obj (unop a) ⟶ P) ≌ P.obj a where
+  -- this should already be a functor in another file
+  functor := {
+    obj θ := (θ.app a).obj (𝟙 (unop a))
+    map Γ := (Γ.app a).app (𝟙 (unop a))
+  }
+  inverse := {
+    obj d := {
+      -- Again this should be a general construction...?
+      app w := {
+        obj h := (P.map h.op).obj d
+        map α := (P.map₂ (op2 α)).app d }
+      naturality f := by
+        simp
+
+      naturality_naturality := sorry
+      naturality_id := sorry
+      naturality_comp := sorry
+    }
+    map := sorry
+    map_id := sorry
+    map_comp := sorry
+  }
+  unitIso := sorry
+  counitIso := sorry
+  functor_unitIso_comp := sorry
+
+@[simps!] -- probably have some bad simp lemmas here?
 def yonedaPairing (P : Pseudofunctor Bᵒᵖ Cat.{w₁, v₁}) : Pseudofunctor Bᵒᵖ Cat :=
     (yoneda (B := B)).op.comp (yoneda₀ P)
 

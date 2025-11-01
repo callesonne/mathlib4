@@ -478,7 +478,7 @@ def yonedaEquiv {X : C} {F : Cᵒᵖ ⥤ Type v₁} : (yoneda.obj X ⟶ F) ≃ F
     dsimp
     rw [← FunctorToTypes.naturality]
     simp
-  right_inv := by intro ξ; simp
+  right_inv ξ := by simp
 
 theorem yonedaEquiv_apply {X : C} {F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) :
     yonedaEquiv f = f.app (op X) (𝟙 X) :=
