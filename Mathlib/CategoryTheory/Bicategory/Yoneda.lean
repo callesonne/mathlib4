@@ -29,7 +29,6 @@ variable {B : Type u₁} [Bicategory.{w₁, v₁} B]
 attribute [local simp] Cat.associator_hom_app Cat.associator_inv_app
   Cat.leftUnitor_hom_app Cat.rightUnitor_hom_app
   Cat.leftUnitor_inv_app Cat.rightUnitor_inv_app
-
 /-- The map on objects underlying the Yoneda embedding. It sends an object `x` to
 the pseudofunctor defined by:
 * Objects: `a ↦ (a ⟶ x)`
@@ -106,6 +105,10 @@ It consists of the following:
 def yonedaPairing (P : Pseudofunctor Bᵒᵖ Cat.{w₁, v₁}) : Pseudofunctor Bᵒᵖ Cat :=
     (yoneda (B := B)).op.comp (yoneda₀ P)
 
+
+-- attribute [-simp] Cat.associator_hom_app Cat.associator_inv_app
+--   Cat.leftUnitor_hom_app Cat.rightUnitor_hom_app
+--   Cat.leftUnitor_inv_app Cat.rightUnitor_inv_app
 /- def yonedaEvaluation (P ) -/
 --attribute [-simp] Iso.app_hom
 -- I don't want to deal w/ universe issues for now
@@ -119,7 +122,6 @@ def yonedaLemmaHom [SmallBicategory B] (P : Pseudofunctor Bᵒᵖ Cat.{u₁, u�
   naturality {a b} f := NatIso.ofComponents
     -- TODO: can I use bicategorical coherence here to simplify?
     (fun θ =>
-    -- this should be expressed as a whiskering?
       ((θ.app b).mapIso (λ_ f.unop ≪≫ (ρ_ f.unop).symm)) ≪≫
         ( (θ.naturality f).app (𝟙 (unop a)))) -- Cat.Iso.app might not be needed
     (fun {θ τ} Γ => by simp [← Γ.naturality_app f (𝟙 (unop a))])
@@ -127,11 +129,18 @@ def yonedaLemmaHom [SmallBicategory B] (P : Pseudofunctor Bᵒᵖ Cat.{u₁, u�
     ext x
     simp [← naturality_naturality_app x Γ (𝟙 (unop a))]
   naturality_comp := by
-    intros
+    intros a b c f g
     ext x
+    -- Really just applying NatTrans.naturality_assoc here...
     simp
-    sorry
+    simp_rw [← Cat.comp_map, ← Functor.map_comp_assoc, ← NatTrans.naturality_assoc]
+    -- Should be 1 simp from here...
+    simp [- NatTrans.naturality_assoc]
+    simp_rw [← Functor.map_comp_assoc]
+    simp
 
+
+#check NatTrans.naturality
   /- left_triangle := sorry -/
 
 /-
