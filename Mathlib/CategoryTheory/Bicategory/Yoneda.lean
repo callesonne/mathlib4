@@ -5,6 +5,8 @@ Authors: Calle Sönne
 -/
 
 import Mathlib.CategoryTheory.Bicategory.FunctorBicategory.Pseudo
+import Mathlib.CategoryTheory.Bicategory.Adjunction.Basic
+import Mathlib.CategoryTheory.Bicategory.Functor.Opposites
 import Mathlib.CategoryTheory.Bicategory.Opposites
 
 /-!
@@ -14,7 +16,7 @@ import Mathlib.CategoryTheory.Bicategory.Opposites
 
 namespace CategoryTheory
 
-open Category Bicategory Bicategory.Opposite Opposite
+open Category Bicategory Bicategory.Opposite Opposite Bicategory.Equivalence
 
 open Bicategory Pseudofunctor StrongTrans
 
@@ -63,6 +65,82 @@ def yoneda : Pseudofunctor B (Pseudofunctor Bᵒᵖ Cat.{w₁, v₁}) where
   toPrelaxFunctor := PrelaxFunctor.mkOfHomFunctors (fun x ↦ yoneda₀ x) postcomposing₂
   mapId a := isoMk (fun b => rightUnitorNatIso (unop b) a)
   mapComp f g := (isoMk (fun b ↦ associatorNatIsoLeft (unop b) f g)).symm
+
+/-- The map on objects underlying the Yoneda embedding. It sends an object `x` to
+the pseudofunctor defined by:
+* Objects: `a ↦ (a ⟶ x)`
+* Higher morphisms get sent to the corresponding "precomposing" operation. -/
+@[simps!]
+def coyoneda₀ (x : B) : Pseudofunctor B Cat.{w₁, v₁} where
+  toPrelaxFunctor := PrelaxFunctor.mkOfHomFunctors (fun y => Cat.of (x ⟶ y))
+    (fun a b => postcomposing x a b)
+  mapId a := rightUnitorNatIso x a
+  mapComp f g := (associatorNatIsoLeft x f g).symm
+
+/-- Postcomposing of a 1-morhisms seen as a strong transformation between pseudofunctors. -/
+@[simps!]
+def precomp₂ {a b : B} (f : a ⟶ b) : coyoneda₀ b ⟶ coyoneda₀ a where
+  app x := (precomposing a b x).obj f
+  naturality g := (associatorNatIsoMiddle f g).symm
+
+/-- Postcomposing of `1`-morphisms seen as a functor from `a ⟶ b` to the hom-category of the
+corresponding pseudofunctors. -/
+@[simps!]
+def precomposing₂ (a b : B) : (a ⟶ b) ⥤ (coyoneda₀ b ⟶ coyoneda₀ a) where
+  obj := precomp₂
+  map η := { app x := (precomposing a b x).map η }
+
+/-- The yoneda pseudofunctor from `B` to `Pseudofunctor Bᵒᵖ Cat`.
+
+It consists of the following:
+* On objects: sends `x : B` to the pseudofunctor `Bᵒᵖ ⥤ Cat` given by
+  `a ↦ (a ⟶ x)` on objects and on 1- and 2-morphisms given by "precomposing"
+* On 1- and 2-morphisms it is given by "postcomposing" -/
+/- @[simps!] -/
+/- def coyoneda : Pseudofunctor B (Pseudofunctor B Cat.{w₁, v₁}) where -/
+/-   toPrelaxFunctor := PrelaxFunctor.mkOfHomFunctors (fun x ↦ coyoneda₀ x) precomposing₂ -/
+/-   mapId a := isoMk (fun b => leftUnitorNatIso a b) -/
+/-   mapComp f g := (isoMk (fun b ↦ associatorNatIsoRight f g b)) -/
+
+@[simps!]
+def yonedaPairing (P : Pseudofunctor Bᵒᵖ Cat.{w₁, v₁}) : Pseudofunctor Bᵒᵖ Cat :=
+    (yoneda (B := B)).op.comp (yoneda₀ P)
+
+/- def yonedaEvaluation (P ) -/
+--attribute [-simp] Iso.app_hom
+-- I don't want to deal w/ universe issues for now
+def yonedaLemmaHom [SmallBicategory B] (P : Pseudofunctor Bᵒᵖ Cat.{u₁, u₁}) :
+    (yonedaPairing P) ⟶ P where
+  app a := {
+    obj θ := (θ.app a).obj (𝟙 (unop a))
+    map Γ := (Γ.app a).app (𝟙 (unop a))
+  }
+  -- Possibly need Cat.NatIso.ofComponents here
+  naturality {a b} f := NatIso.ofComponents
+    -- TODO: can I use bicategorical coherence here to simplify?
+    (fun θ =>
+    -- this should be expressed as a whiskering?
+      ((θ.app b).mapIso (λ_ f.unop ≪≫ (ρ_ f.unop).symm)) ≪≫
+        ( (θ.naturality f).app (𝟙 (unop a)))) -- Cat.Iso.app might not be needed
+    (fun {θ τ} Γ => by simp [← Γ.naturality_app f (𝟙 (unop a))])
+  naturality_naturality {a b θ τ} Γ := by
+    ext x
+    simp [← naturality_naturality_app x Γ (𝟙 (unop a))]
+  naturality_comp := by
+    intros
+    ext x
+    simp
+    sorry
+
+  /- left_triangle := sorry -/
+
+/-
+WANT NOW: for any pseudofunctor P, asssoc pseudofunctor from B to ( - "" -) sending C to
+Pseudo(yoneda.obj c, P)
+
+Want "evaluation uncurried ..." in this setting. Don't have products of bicategories, so let's do
+"evaluatoin curried": Pseudo()
+-/
 
 end Bicategory
 

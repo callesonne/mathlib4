@@ -77,6 +77,19 @@ instance category : LargeCategory.{max v u} Cat.{v, u} :=
 /-- Synonym for `NatTrans.app` to help with automation. -/
 abbrev app {C D : Cat} {F G : C ⟶ D} (α : F ⟶ G) (x : C) := α.app x
 
+/-- Synonym for `Iso.app` to help with automation. -/
+abbrev Iso.app {C D : Cat} {F G : C ⟶ D} (α : F ≅ G) (x : C) := α.app x
+
+@[simp]
+lemma Iso.app_hom {C D : Cat} {F G : C ⟶ D} (α : F ≅ G) (x : C) :
+    (Iso.app α x).hom = Cat.app α.hom x :=
+  rfl
+
+@[simp]
+lemma Iso.app_inv {C D : Cat} {F G : C ⟶ D} (α : F ≅ G) (x : C) :
+    (Iso.app α x).inv = Cat.app α.inv x :=
+  rfl
+
 @[ext]
 theorem ext {C D : Cat} {F G : C ⟶ D} {α β : F ⟶ G} (w : app α = app β) : α = β :=
   NatTrans.ext w

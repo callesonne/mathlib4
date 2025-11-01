@@ -156,11 +156,11 @@ instance bicategory : Bicategory.{w, v} Bᵒᵖ where
   associator f g h := (associator h.unop g.unop f.unop).op2_unop.symm
   leftUnitor f := (rightUnitor f.unop).op2_unop
   rightUnitor f := (leftUnitor f.unop).op2_unop
+  -- TODO: make `op` an ext lemma? That would make three of these by aesop...
   whisker_exchange η θ := congrArg op2 <| (whisker_exchange _ _).symm
-  -- TODO: golf?
-  whisker_assoc f g g' η i := by apply congrArg op2; simp
-  pentagon f g h i := by apply congrArg op2; simp
-  triangle f g := by apply congrArg op2; simp
+  whisker_assoc f g g' η i := congrArg op2 <| by simp
+  pentagon f g h i := congrArg op2 <| by simp
+  triangle f g := congrArg op2 <| by simp
 
 @[simp]
 lemma op2_whiskerLeft {a b c : B} {f : a ⟶ b} {g g' : b ⟶ c} (η : g ⟶ g') :
@@ -192,4 +192,6 @@ lemma op2_rightUnitor_hom {a b : B} (f : a ⟶ b) :
     op2 (ρ_ f).hom = (λ_ f.op).hom :=
   rfl
 
-end Bicategory.Opposite
+end Opposite
+
+end Bicategory
