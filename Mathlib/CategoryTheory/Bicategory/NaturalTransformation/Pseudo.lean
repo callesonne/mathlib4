@@ -77,7 +77,7 @@ attribute [to_app (attr := reassoc (attr := simp))] StrongTrans.naturality_natur
 
 namespace StrongTrans
 
-variable {F G : Pseudofunctor B C}
+variable {F G : B ⥤ᵖ C}
 
 /-- The strong transformation between underlying pseudofunctors. -/
 @[simps]
@@ -108,17 +108,17 @@ def id : StrongTrans F F where
 instance : Inhabited (StrongTrans F F) :=
   ⟨id F⟩
 
-variable {H : Pseudofunctor B C}
+variable {H : B ⥤ᵖ C}
 
 /-- Vertical composition of strong transformations. -/
 def vcomp (η : StrongTrans F G) (θ : StrongTrans G H) : StrongTrans F H :=
   mkOfOplax (Oplax.StrongTrans.vcomp η.toOplax θ.toOplax)
 
-/-- `CategoryStruct` on `Pseudofunctor B C` where the (1-)morphisms are given by strong
+/-- `CategoryStruct` on `B ⥤ᵖ C` where the (1-)morphisms are given by strong
 transformations. -/
 @[simps! id_app id_naturality_hom id_naturality_inv comp_naturality_hom
 comp_naturality_inv]
-scoped instance categoryStruct : CategoryStruct (Pseudofunctor B C) where
+scoped instance categoryStruct : CategoryStruct (B ⥤ᵖ C) where
   Hom F G := StrongTrans F G
   id F := StrongTrans.id F
   comp := StrongTrans.vcomp
@@ -185,7 +185,7 @@ theorem whiskerRight_naturality_id (f : G.obj a ⟶ a') :
     (α_ _ _ _).hom :=
   η.toOplax.whiskerRight_naturality_id _
 
-@[reassoc, to_app]
+@[to_app (attr := reassoc)]
 lemma naturality_id_hom (α : F ⟶ G) (a : B) :
     (α.naturality (𝟙 a)).hom = (F.mapId a).hom ▷ α.app a ≫
       (λ_ (α.app a)).hom ≫ (ρ_ (α.app a)).inv ≫ α.app a ◁ (G.mapId a).inv := by
@@ -197,13 +197,18 @@ lemma naturality_id_iso (α : F ⟶ G) (a : B) :
   ext
   simp [naturality_id_hom]
 
-@[reassoc, to_app]
+@[to_app (attr := reassoc)]
 lemma naturality_id_inv (α : F ⟶ G) (a : B) :
     (α.naturality (𝟙 a)).inv = α.app a ◁ (G.mapId a).hom ≫ (ρ_ (α.app a)).hom ≫
       (λ_ (α.app a)).inv ≫ (F.mapId a).inv ▷ α.app a := by
   simp [naturality_id_iso]
 
-@[reassoc, to_app]
+@[to_app (attr := reassoc)]
+lemma map₂_whiskerRight_app (α : F ⟶ G) {a b : B} {f g : a ⟶ b} (η : f ⟶ g) :
+    F.map₂ η ▷ α.app b = (α.naturality f).hom ≫ α.app a ◁ G.map₂ η ≫ (α.naturality g).inv := by
+  simp [← naturality_naturality_assoc]
+
+@[to_app (attr := reassoc)]
 lemma naturality_naturality_hom (α : F ⟶ G) {a b : B} {f g : a ⟶ b} (η : f ≅ g) :
     (α.naturality g).hom =
      (F.map₂ η.inv) ▷ α.app b ≫ (α.naturality f).hom ≫ α.app a ◁ G.map₂ η.hom := by
@@ -221,7 +226,7 @@ lemma naturality_naturality_inv (α : F ⟶ G) {a b : B} {f g : a ⟶ b} (η : f
       α.app a ◁ G.map₂ η.inv ≫ (α.naturality f).inv ≫ F.map₂ η.hom ▷ α.app b := by
   simp [naturality_naturality_iso α η]
 
-@[reassoc, to_app]
+@[to_app (attr := reassoc)]
 lemma naturality_comp_hom (α : F ⟶ G) {a b c : B} (f : a ⟶ b) (g : b ⟶ c) :
     (α.naturality (f ≫ g)).hom =
       (F.mapComp f g).hom ▷ α.app c ≫ (α_ _ _ _).hom ≫ F.map f ◁ (α.naturality g).hom ≫
@@ -237,7 +242,7 @@ lemma naturality_comp_iso (α : F ⟶ G) {a b c : B} (f : a ⟶ b) (g : b ⟶ c)
   ext
   simp [naturality_comp_hom α f g]
 
-@[reassoc, to_app]
+@[to_app (attr := reassoc)]
 lemma naturality_comp_inv (α : F ⟶ G) {a b c : B} (f : a ⟶ b) (g : b ⟶ c) :
     (α.naturality (f ≫ g)).inv =
       α.app a ◁ (G.mapComp f g).hom ≫ (α_ _ _ _).inv ≫  (α.naturality f).inv ▷ G.map g ≫

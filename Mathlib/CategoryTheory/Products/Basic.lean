@@ -34,12 +34,11 @@ universe v₁ v₂ v₃ v₄ u₁ u₂ u₃ u₄
 
 section
 
-variable (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D]
+variable (C : Type u₁) [CategoryStruct.{v₁} C] (D : Type u₂) [CategoryStruct.{v₂} D]
 
--- the generates simp lemmas like `id_fst` and `comp_snd`
-/-- `prod C D` gives the Cartesian product of two categories. -/
-@[simps (notRecursive := []) Hom id_fst id_snd comp_fst comp_snd, stacks 001K]
-instance prod : Category.{max v₁ v₂} (C × D) where
+/-- `CategoryStruct.prod C D` gives the Cartesian product of two `CategoryStruct`'s. -/
+@[simps (notRecursive := [])] -- notRecursive to generate simp lemmas like `id_fst` and `comp_snd`
+instance prod : CategoryStruct.{max v₁ v₂} (C × D) where
   Hom X Y := (X.1 ⟶ Y.1) × (X.2 ⟶ Y.2)
   id X := ⟨𝟙 X.1, 𝟙 X.2⟩
   comp f g := (f.1 ≫ g.1, f.2 ≫ g.2)
@@ -72,6 +71,17 @@ abbrev mkHom {X₁ X₂ : C} {Y₁ Y₂ : D} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y
 scoped infixr:70 " ×ₘ " => Prod.mkHom
 
 end Prod
+
+end
+
+section
+
+variable (C : Type u₁) [Category.{v₁} C] (D : Type u₂) [Category.{v₂} D]
+
+/-- `prod C D` gives the Cartesian product of two categories. -/
+@[stacks 001K]
+instance prod' : Category.{max v₁ v₂} (C × D) where
+
 theorem isIso_prod_iff {P Q : C} {S T : D} {f : (P, S) ⟶ (Q, T)} :
     IsIso f ↔ IsIso f.1 ∧ IsIso f.2 := by
   constructor
@@ -113,7 +123,7 @@ variable (C : Type u₁) [Category.{v₁} C] (D : Type u₁) [Category.{v₁} D]
 universe levels. This helps typeclass resolution.
 -/
 instance uniformProd : Category (C × D) :=
-  CategoryTheory.prod C D
+  CategoryTheory.prod' C D
 
 end
 
@@ -158,8 +168,8 @@ to the identity functor.
 -/
 @[simps]
 def symmetry : swap C D ⋙ swap D C ≅ 𝟭 (C × D) where
-  hom := { app := fun X => 𝟙 X }
-  inv := { app := fun X => 𝟙 X }
+  hom := { app X := 𝟙 X }
+  inv := { app X := 𝟙 X }
 
 /-- The equivalence, given by swapping factors, between `C × D` and `D × C`.
 -/
@@ -198,10 +208,10 @@ which is functorial in both `X` and `F`.
 @[simps]
 def evaluation : C ⥤ (C ⥤ D) ⥤ D where
   obj X :=
-    { obj := fun F => F.obj X
-      map := fun α => α.app X }
+    { obj F := F.obj X
+      map α := α.app X }
   map {_} {_} f :=
-    { app := fun F => F.map f }
+    { app F := F.map f }
 
 /-- The "evaluation of `F` at `X`" functor,
 as a functor `C × (C ⥤ D) ⥤ D`.
@@ -209,7 +219,7 @@ as a functor `C × (C ⥤ D) ⥤ D`.
 @[simps]
 def evaluationUncurried : C × (C ⥤ D) ⥤ D where
   obj p := p.2.obj p.1
-  map := fun {x} {y} f => x.2.map f.1 ≫ f.2.app y.1
+  map {x} {y} f := x.2.map f.1 ≫ f.2.app y.1
 
 variable {C}
 
@@ -395,8 +405,8 @@ open Opposite
 @[simps!]
 def prodOpEquiv : (C × D)ᵒᵖ ≌ Cᵒᵖ × Dᵒᵖ where
   functor :=
-    { obj := fun X ↦ ⟨op X.unop.1, op X.unop.2⟩,
-      map := fun f ↦ ⟨f.unop.1.op, f.unop.2.op⟩ }
+    { obj X := ⟨op X.unop.1, op X.unop.2⟩,
+      map f := ⟨f.unop.1.op, f.unop.2.op⟩ }
   inverse :=
     { obj := fun ⟨X,Y⟩ ↦ op ⟨X.unop, Y.unop⟩,
       map := fun ⟨f,g⟩ ↦ op ⟨f.unop, g.unop⟩ }

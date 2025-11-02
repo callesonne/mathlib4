@@ -51,7 +51,7 @@ structure Modification where
   naturality :
     ∀ {a b : B} (f : a ⟶ b),
       F.map f ◁ app b ≫ (θ.naturality f).hom =
-        (η.naturality f).hom ≫ app a ▷ G.map f := by aesop_cat
+        (η.naturality f).hom ≫ app a ▷ G.map f := by cat_disch
 
 attribute [to_app (attr := reassoc (attr := simp))] Modification.naturality
 
@@ -60,6 +60,11 @@ variable {η θ}
 namespace Modification
 
 variable (Γ : Modification η θ)
+
+@[to_app (attr := reassoc (attr := simp))]
+theorem map_whiskerLeft_app {a b : B} (f : a ⟶ b) :
+    F.map f ◁ Γ.app b = (η.naturality f).hom ≫ Γ.app a ▷ G.map f ≫ (θ.naturality f).inv := by
+  simp [← naturality_assoc]
 
 /-- The modification between the corresponding strong transformation of the underlying oplax
 functors. -/
@@ -142,7 +147,7 @@ by giving object level isomorphisms, and checking naturality only in the forward
 def isoMk (app : ∀ a, η.app a ≅ θ.app a)
     (naturality : ∀ {a b} (f : a ⟶ b),
       F.map f ◁ (app b).hom ≫ (θ.naturality f).hom =
-        (η.naturality f).hom ≫ (app a).hom ▷ G.map f := by aesop_cat) :
+        (η.naturality f).hom ≫ (app a).hom ▷ G.map f := by cat_disch) :
     η ≅ θ where
   hom := { app a := (app a).hom }
   inv :=
