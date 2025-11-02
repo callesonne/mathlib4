@@ -5,7 +5,7 @@ Authors: Calle Sönne
 -/
 
 import Mathlib.CategoryTheory.Bicategory.LocallyDiscrete
-import Mathlib.CategoryTheory.Bicategory.NaturalTransformation.Pseudo
+import Mathlib.CategoryTheory.Bicategory.FunctorBicategory.Pseudo
 
 /-!
 # The Grothendieck and CoGrothendieck constructions
@@ -236,25 +236,49 @@ section
 variable (F)
 
 /-- The natural isomorphism witnessing the pseudo-unity constraint of `CoGrothendieck.map`. -/
-def mapIdIso : map (𝟙 F) ≅ 𝟭 (∫ᶜ F) :=
+def mapId : map (𝟙 F) ≅ 𝟭 (∫ᶜ F) :=
   NatIso.ofComponents (fun _ ↦ eqToIso (by cat_disch))
 
 lemma map_id_eq : map (𝟙 F) = 𝟭 (∫ᶜ F) :=
-  Functor.ext_of_iso (mapIdIso F) (fun x ↦ by simp [map]) (fun x ↦ by simp [mapIdIso])
+  Functor.ext_of_iso (mapId F) (fun x ↦ by simp [map]) (fun x ↦ by simp [mapId])
 
 end
 
 /-- The natural isomorphism witnessing the pseudo-functoriality of `CoGrothendieck.map`. -/
-def mapCompIso (α : F ⟶ G) (β : G ⟶ H) : map (α ≫ β) ≅ map α ⋙ map β :=
+def mapComp (α : F ⟶ G) (β : G ⟶ H) : map (α ≫ β) ≅ map α ⋙ map β :=
   NatIso.ofComponents (fun _ ↦ eqToIso (by cat_disch)) (fun f ↦ by
     dsimp
     simp only [comp_id, id_comp]
     ext <;> simp)
 
 lemma map_comp_eq (α : F ⟶ G) (β : G ⟶ H) : map (α ≫ β) = map α ⋙ map β :=
-  Functor.ext_of_iso (mapCompIso α β) (fun _ ↦ by simp [map]) (fun _ ↦ by simp [mapCompIso])
+  Functor.ext_of_iso (mapComp α β) (fun _ ↦ by simp [map]) (fun _ ↦ by simp [mapComp])
 
 end
+
+/-- The CoGrothendieck construction as a pseudofunctor.
+
+This should be upgraded to take values in `FibCat` once this bicategory has been
+defined. -/
+def CoGrothendieckPseudo :
+    Pseudofunctor (Pseudofunctor (LocallyDiscrete 𝒮ᵒᵖ) Cat.{v₂, u₂}) Cat where
+  obj F := Cat.of (∫ᶜ F)
+  map α := map α
+  map₂ {F G α β} Γ := {
+    app X := {
+      base := 𝟙 _
+      fiber := ((Γ.app ⟨op X.base⟩).app _) ≫ (G.mapId _).inv.app _ }
+    naturality {a b} f := by
+      intros
+      fapply Hom.ext
+      · simp
+      · simp
+        -- app version needed
+        have := Γ.naturality f.base.op.toLoc
+        sorry
+  }
+  mapId := mapId
+  mapComp := mapComp
 
 end Pseudofunctor.CoGrothendieck
 
