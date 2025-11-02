@@ -162,6 +162,13 @@ section
 
 variable (F : B ⥤ᵖ C) {a b : B}
 
+@[to_app (attr := reassoc (attr := simp))]
+lemma map₂_associator_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
+    F.map₂ (α_ f g h).inv = (F.mapComp f (g ≫ h)).hom ≫ F.map f ◁ (F.mapComp g h).hom ≫
+    (α_ (F.map f) (F.map g) (F.map h)).inv ≫ (F.mapComp f g).inv ▷ F.map h ≫
+    (F.mapComp (f ≫ g) h).inv := by
+  sorry
+
 @[to_app (attr := reassoc)]
 lemma mapComp_assoc_right_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     (F.mapComp f (g ≫ h)).hom ≫ F.map f ◁ (F.mapComp g h).hom = F.map₂ (α_ f g h).inv ≫
