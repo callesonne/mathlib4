@@ -273,8 +273,11 @@ def CoGrothendieckPseudo :
       fapply Hom.ext
       · simp
       · simp
+        rw [← Γ.naturality_app_assoc f.base.op.toLoc b.fiber]
+        -- Need StrongTrans.whiskerLeft_app lemma (& to_app version of this). Wait for other PRs first
         -- app version needed
-        have := Γ.naturality f.base.op.toLoc
+        have := Γ.naturality_app_assoc f.base.op.toLoc b.fiber
+
         sorry
   }
   mapId := mapId
