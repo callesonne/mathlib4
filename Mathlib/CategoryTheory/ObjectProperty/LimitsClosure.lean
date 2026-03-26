@@ -3,20 +3,25 @@ Copyright (c) 2025 Joël Riou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Joël Riou
 -/
-import Mathlib.CategoryTheory.ObjectProperty.LimitsOfShape
-import Mathlib.CategoryTheory.ObjectProperty.CompleteLattice
-import Mathlib.Order.TransfiniteIteration
-import Mathlib.SetTheory.Cardinal.HasCardinalLT
+module
+
+public import Mathlib.CategoryTheory.ObjectProperty.LimitsOfShape
+public import Mathlib.CategoryTheory.ObjectProperty.CompleteLattice
+public import Mathlib.Order.TransfiniteIteration
+public import Mathlib.SetTheory.Cardinal.HasCardinalLT
 
 /-!
 # Closure of a property of objects under limits of certain shapes
 
 In this file, given a property `P` of objects in a category `C` and
-family of categories `J : α → Type _`, we introduce the closure
+a family of categories `J : α → Type _`, we introduce the closure
 `P.limitsClosure J` of `P` under limits of shapes `J a` for all `a : α`,
-and under certain smallness assumptions, we show that its essentially small.
+and under certain smallness assumptions, we show that it is essentially small.
 
 -/
+
+@[expose] public section
+
 universe w w' t v' u' v u
 
 namespace CategoryTheory.ObjectProperty
@@ -26,7 +31,7 @@ open Limits
 variable {C : Type u} [Category.{v} C] (P : ObjectProperty C)
   {α : Type t} (J : α → Type u') [∀ a, Category.{v'} (J a)]
 
-/-- The closure of property of objects of a category under limits of
+/-- The closure of a property of objects of a category under limits of
 shape `J a` for a family of categories `J`. -/
 inductive limitsClosure : ObjectProperty C
   | of_mem (X : C) (hX : P X) : limitsClosure X
@@ -61,6 +66,19 @@ lemma limitsClosure_monotone {Q : ObjectProperty C} (h : P ≤ Q) :
     P.limitsClosure J ≤ Q.limitsClosure J :=
   limitsClosure_le (h.trans (Q.le_limitsClosure J))
 
+lemma limitsClosure_eq_self [P.IsClosedUnderIsomorphisms]
+    [∀ (a : α), P.IsClosedUnderLimitsOfShape (J a)] : P.limitsClosure J = P :=
+  le_antisymm (limitsClosure_le (le_refl P)) (P.le_limitsClosure J)
+
+@[simp]
+lemma limitsClosure_bot [∀ (a : α), Nonempty (J a)] :
+    limitsClosure (⊥ : ObjectProperty C) J = ⊥ :=
+  limitsClosure_eq_self _ _
+
+@[simp]
+lemma limitsClosure_top : limitsClosure (⊤ : ObjectProperty C) J = ⊤ :=
+  limitsClosure_eq_self _ _
+
 lemma limitsClosure_isoClosure :
     P.isoClosure.limitsClosure J = P.limitsClosure J := by
   refine le_antisymm (limitsClosure_le ?_)
@@ -68,8 +86,16 @@ lemma limitsClosure_isoClosure :
   rw [isoClosure_le_iff]
   exact le_limitsClosure P J
 
+/-- The closure of a property of objects of a category under limits of
+shape `J` for a category `J`. -/
+abbrev limitClosure (J : Type*) [Category* J] : ObjectProperty C :=
+  P.limitsClosure (fun (_ : Unit) ↦ J)
+
+instance (J : Type*) [Category* J] : (P.limitClosure J).IsClosedUnderLimitsOfShape J :=
+  P.instIsClosedUnderLimitsOfShapeLimitsClosure _ ()
+
 /-- Given `P : ObjectProperty C` and a family of categories `J : α → Type _`,
-this property objects contains `P` and all objects that are equal to `lim F`
+this property of objects contains `P` and all objects that are equal to `lim F`
 for some functor `F : J a ⥤ C` such that `F.obj j` satisfies `P` for any `j`. -/
 def strictLimitsClosureStep : ObjectProperty C :=
   P ⊔ (⨆ (a : α), P.strictLimitsOfShape (J a))
@@ -82,8 +108,9 @@ lemma strictLimitsClosureStep_monotone {Q : ObjectProperty C} (h : P ≤ Q) :
     P.strictLimitsClosureStep J ≤ Q.strictLimitsClosureStep J := by
   dsimp [strictLimitsClosureStep]
   simp only [sup_le_iff, iSup_le_iff]
-  exact ⟨h.trans le_sup_left, fun a ↦ (strictLimitsOfShape_monotone (J a) h).trans
-    (le_trans (by rfl) ((le_iSup _ a).trans le_sup_right))⟩
+  exact ⟨h.trans le_sup_left, fun a ↦
+    (strictLimitsOfShape_monotone (J a) h).trans <|
+      le_iSup (fun a ↦ Q.strictLimitsOfShape (J a)) a |>.trans le_sup_right⟩
 
 section
 
@@ -165,7 +192,7 @@ lemma strictLimitsClosureStep_strictLimitsClosureIter_eq_self :
     obtain ⟨m, hm, hm'⟩ : ∃ (m : Ordinal.{w}) (hm : m < κ.ord), ∀ (j : J a), o j ≤ m := by
       refine ⟨⨆ j, o ((equivShrink.{w} (J a)).symm j),
           Ordinal.iSup_lt_ord ?_ (fun _ ↦ ho _), fun j ↦ ?_⟩
-      · rw [hκ.cof_eq, ← hasCardinalLT_iff_cardinal_mk_lt _ κ,
+      · rw [hκ.cof_ord, ← hasCardinalLT_iff_cardinal_mk_lt _ κ,
           ← hasCardinalLT_iff_of_equiv (equivShrink.{w} (J a))]
         exact h a
       · obtain ⟨j, rfl⟩ := (equivShrink.{w} (J a)).symm.surjective j

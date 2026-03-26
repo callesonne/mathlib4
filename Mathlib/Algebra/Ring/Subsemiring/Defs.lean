@@ -3,7 +3,9 @@ Copyright (c) 2020 Yury Kudryashov. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yury Kudryashov
 -/
-import Mathlib.RingTheory.NonUnitalSubsemiring.Defs
+module
+
+public import Mathlib.RingTheory.NonUnitalSubsemiring.Defs
 
 /-!
 # Bundled subsemirings
@@ -11,6 +13,8 @@ import Mathlib.RingTheory.NonUnitalSubsemiring.Defs
 We define bundled subsemirings and some standard constructions: `subtype` and `inclusion`
 ring homomorphisms.
 -/
+
+@[expose] public section
 
 assert_not_exists RelIso
 
@@ -74,6 +78,12 @@ instance (priority := 75) toNonAssocSemiring : NonAssocSemiring s := fast_instan
   Subtype.coe_injective.nonAssocSemiring Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
 
+/-- A subsemiring of a `NonAssocCommSemiring` inherits a `NonAssocCommSemiring` structure -/
+instance (priority := 75) toNonAssocCommSemiring {R} [NonAssocCommSemiring R] [SetLike S R]
+    [SubsemiringClass S R] : NonAssocCommSemiring s := fast_instance%
+  Subtype.coe_injective.nonAssocCommSemiring Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl)
+    (fun _ _ => rfl) fun _ => rfl
+
 instance nontrivial [Nontrivial R] : Nontrivial s :=
   nontrivial_of_ne 0 1 fun H => zero_ne_one (congr_arg Subtype.val H)
 
@@ -104,8 +114,6 @@ instance (priority := 75) toSemiring {R} [Semiring R] [SetLike S R] [Subsemiring
   Subtype.coe_injective.semiring Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
-@[deprecated (since := "2025-07-29")] alias coe_pow := SubmonoidClass.coe_pow
-
 /-- A subsemiring of a `CommSemiring` is a `CommSemiring`. -/
 instance toCommSemiring {R} [CommSemiring R] [SetLike S R] [SubsemiringClass S R] :
     CommSemiring s := fast_instance%
@@ -133,6 +141,8 @@ namespace Subsemiring
 instance : SetLike (Subsemiring R) R where
   coe s := s.carrier
   coe_injective' p q h := by cases p; cases q; congr; exact SetLike.coe_injective' h
+
+instance : PartialOrder (Subsemiring R) := .ofSetLike (Subsemiring R) R
 
 initialize_simps_projections Subsemiring (carrier → coe, as_prefix coe)
 
@@ -299,7 +309,7 @@ protected theorem pow_mem {R : Type*} [Semiring R] (s : Subsemiring R) {x : R} (
 
 instance noZeroDivisors [NoZeroDivisors R] : NoZeroDivisors s where
   eq_zero_or_eq_zero_of_mul_eq_zero {_ _} h :=
-    (eq_zero_or_eq_zero_of_mul_eq_zero <| Subtype.ext_iff.mp h).imp Subtype.eq Subtype.eq
+    (eq_zero_or_eq_zero_of_mul_eq_zero <| Subtype.ext_iff.mp h).imp Subtype.ext Subtype.ext
 
 /-- A subsemiring of a `Semiring` is a `Semiring`. -/
 instance toSemiring {R} [Semiring R] (s : Subsemiring R) : Semiring s :=
@@ -311,7 +321,7 @@ theorem coe_pow {R} [Semiring R] (s : Subsemiring R) (x : s) (n : ℕ) :
 
 /-- A subsemiring of a `CommSemiring` is a `CommSemiring`. -/
 instance toCommSemiring {R} [CommSemiring R] (s : Subsemiring R) : CommSemiring s :=
-  { s.toSemiring with mul_comm := fun _ _ => Subtype.eq <| mul_comm _ _ }
+  { s.toSemiring with mul_comm := fun _ _ => Subtype.ext <| mul_comm _ _ }
 
 /-- The natural ring hom from a subsemiring of semiring `R` to `R`. -/
 def subtype : s →+* R :=

@@ -3,12 +3,13 @@ Copyright (c) 2020 Kenny Lau. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Kenny Lau, Antoine Chambert-Loir
 -/
+module
 
-import Mathlib.Algebra.Group.Hom.CompTypeclasses
-import Mathlib.Algebra.Module.Defs
-import Mathlib.Algebra.Notation.Prod
-import Mathlib.Algebra.Regular.SMul
-import Mathlib.Algebra.Ring.Action.Basic
+public import Mathlib.Algebra.Group.Hom.CompTypeclasses
+public import Mathlib.Algebra.Module.Defs
+public import Mathlib.Algebra.Notation.Prod
+public import Mathlib.Algebra.Regular.SMul
+public import Mathlib.Algebra.Ring.Action.Basic
 
 /-!
 # Equivariant homomorphisms
@@ -53,6 +54,8 @@ that it could lead to confusion — unless one needs types `M` and `X` with simu
 instances of `Mul M`, `Add M`, `SMul M X` and `VAdd M X`…
 
 -/
+
+@[expose] public section
 
 assert_not_exists Submonoid
 
@@ -327,20 +330,16 @@ theorem comp_inverse' {f : X →ₑ[φ] Y} {g : Y → X}
     {k₁ : Function.LeftInverse φ' φ} {k₂ : Function.RightInverse φ' φ}
     {h₁ : Function.LeftInverse g f} {h₂ : Function.RightInverse g f} :
     (inverse' f g k₂ h₁ h₂).comp f (κ := CompTriple.comp_inv k₁) = MulActionHom.id M := by
-  rw [MulActionHom.ext_iff]
-  intro x
-  simp only [comp_apply, id_apply]
-  exact h₁ x
+  ext
+  simpa using h₁.eq _
 
 @[to_additive]
 theorem inverse'_comp {f : X →ₑ[φ] Y} {g : Y → X}
     {k₂ : Function.RightInverse φ' φ}
     {h₁ : Function.LeftInverse g f} {h₂ : Function.RightInverse g f} :
     f.comp (inverse' f g k₂ h₁ h₂) (κ := CompTriple.comp_inv k₂) = MulActionHom.id N := by
-  rw [MulActionHom.ext_iff]
-  intro x
-  simp only [comp_apply, id_apply]
-  exact h₂ x
+  ext
+  simpa using h₂.eq _
 
 /-- If actions of `M` and `N` on `α` commute,
   then for `c : M`, `(c • · : α → α)` is an `N`-action homomorphism. -/
@@ -471,8 +470,8 @@ instance [AddZeroClass Y] [SMul M X] [DistribSMul N Y] [DistribSMul R Y] [SMulCo
 instance [AddMonoid Y] [Monoid R] [SMul M X] [DistribSMul N Y]
     [DistribMulAction R Y] [SMulCommClass N R Y] :
     DistribMulAction R (X →ₑ[σ] Y) where
-  __ := inferInstanceAs (MulAction _ _)
-  __ := inferInstanceAs (DistribSMul _ _)
+  __ := (inferInstance : MulAction _ _)
+  __ := (inferInstance : DistribSMul _ _)
 
 instance [AddCommMonoid Y] [Semiring R] [SMul M X] [DistribSMul N Y]
     [Module R Y] [SMulCommClass N R Y] :
@@ -522,8 +521,8 @@ instance [SMul M X] [Monoid N] [CommMonoid Y] [MulDistribMulAction N Y] :
 
 instance [SMul M X] [Monoid N] [Semiring Y] [MulSemiringAction N Y] :
     Semiring (X →ₑ[σ] Y) where
-  __ := inferInstanceAs (Monoid _)
-  __ := inferInstanceAs (AddCommMonoid _)
+  __ := (inferInstance : Monoid _)
+  __ := (inferInstance : AddCommMonoid _)
   zero_mul _ := ext fun x ↦ zero_mul _
   mul_zero _ := ext fun x ↦ mul_zero _
   left_distrib _ _ _ := ext fun x ↦ left_distrib _ _ _
@@ -798,7 +797,7 @@ class MulSemiringActionSemiHomClass (F : Type*)
     extends DistribMulActionSemiHomClass F φ R S, RingHomClass F R S
 
 /-- `MulSemiringActionHomClass F M R S` states that `F` is a type of morphisms preserving
-the ring structure and equivariant with respect to a `DistribMulAction`of `M` on `R` and `S` .
+the ring structure and equivariant with respect to a `DistribMulAction` of `M` on `R` and `S`.
 -/
 abbrev MulSemiringActionHomClass
     (F : Type*)

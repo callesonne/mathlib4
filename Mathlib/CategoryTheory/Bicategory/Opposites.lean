@@ -3,9 +3,10 @@ Copyright (c) 2025 Calle Sönne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Calle Sönne
 -/
+module
 
-import Mathlib.CategoryTheory.Bicategory.Basic
-import Mathlib.CategoryTheory.Opposites
+public import Mathlib.CategoryTheory.Bicategory.Basic
+public import Mathlib.CategoryTheory.Opposites
 
 /-!
 # Opposite bicategories
@@ -16,15 +17,12 @@ We construct the 1-cell opposite of a bicategory `B`, called `Bᵒᵖ`. It is de
 * The 2-morphisms `f ⟶ g` in `Bᵒᵖ` are the 2-morphisms `f ⟶ g` in `B`. In other words, the
   directions of the 2-morphisms are preserved.
 
-Note that the standard notation for the opposite of a bicategory is `Bᵒᵖ`, however this clashes
-with the notation for the opposite of a 1-category, so we use `Bᵒᵖ` instead.
-
-# Remarks
+## Remarks
 There are multiple notions of opposite categories for bicategories.
 - There is 1-cell dual `Bᵒᵖ` as defined above.
-- There is the 2-cell dual, `Cᶜᵒ` where only the natural transformations are reversed
-- There is the bi-dual `Cᶜᵒᵒᵖ` where the directions of both the morphisms and the natural
-  transformations are reversed.
+- There is the 2-cell dual, `Cᶜᵒ` where only the 2-morphisms are reversed
+- There is the bi-dual `Cᶜᵒᵒᵖ` where the directions of both the 1-morphisms and the 2-morphisms
+  are reversed.
 
 ## TODO
 
@@ -35,6 +33,8 @@ Note: `Cᶜᵒᵒᵖ` is WIP by Christian Merten.
 
 -/
 
+@[expose] public section
+
 universe w v u
 
 open CategoryTheory Bicategory Opposite
@@ -43,8 +43,9 @@ namespace Bicategory.Opposite
 
 variable {B : Type u} [Bicategory.{w, v} B]
 
+/-- Type synonym for 2-morphisms in the opposite bicategory. -/
 structure Hom2 {a b : Bᵒᵖ} (f g : a ⟶ b) where
-  op :: -- Need manual constructor anyway
+  op2' ::
   /-- `Bᵒᵖ` preserves the direction of all 2-morphisms in `B` -/
   unop2 : f.unop ⟶ g.unop
 
@@ -53,12 +54,12 @@ open Hom2
 @[simps!]
 instance homCategory (a b : Bᵒᵖ) : Category.{w} (a ⟶ b) where
   Hom f g := Hom2 f g
-  id f := op (𝟙 f.unop)
-  comp η θ := op (η.unop2 ≫ θ.unop2)
+  id f := op2' (𝟙 f.unop)
+  comp η θ := op2' (η.unop2 ≫ θ.unop2)
 
--- TODO: dot notation...?
-abbrev op2 {a b : B} {f g : a ⟶ b} (η : f ⟶ g) : f.op ⟶ g.op :=
-  op η
+/-- Synonym for constructor of `Hom2` where the 1-morphisms `f` and `g` lie in `B` and not `Bᵒᵖ`. -/
+def op2 {a b : B} {f g : a ⟶ b} (η : f ⟶ g) : f.op ⟶ g.op :=
+  op2' η
 
 @[simp]
 theorem unop2_op2 {a b : B} {f g : a ⟶ b} (η : f ⟶ g) : (op2 η).unop2 = η :=
@@ -142,7 +143,7 @@ end CategoryTheory.Iso
 
 namespace Bicategory.Opposite
 
-open Hom2 -- TODO: should I do this?
+open Hom2
 
 variable {B : Type u} [Bicategory.{w, v} B]
 
@@ -181,17 +182,17 @@ lemma op2_whiskerRight {a b c : B} {f f' : a ⟶ b} {g : b ⟶ c} (η : f ⟶ f'
 
 @[simp]
 lemma op2_associator {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
-  (α_ f g h).op2 = (α_ h.op g.op f.op).symm :=
+    (α_ f g h).op2 = (α_ h.op g.op f.op).symm :=
   rfl
 
 @[simp]
 lemma op2_associator_hom {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
-  op2 (α_ f g h).hom = (α_ h.op g.op f.op).symm.hom :=
+    op2 (α_ f g h).hom = (α_ h.op g.op f.op).symm.hom :=
   rfl
 
 @[simp]
 lemma op2_associator_inv {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
-  op2 (α_ f g h).inv = (α_ h.op g.op f.op).symm.inv :=
+    op2 (α_ f g h).inv = (α_ h.op g.op f.op).symm.inv :=
   rfl
 
 @[simp]

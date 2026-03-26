@@ -3,8 +3,10 @@ Copyright (c) 2025 Joël Riou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Joël Riou
 -/
-import Mathlib.CategoryTheory.Bicategory.Adjunction.Mate
-import Mathlib.CategoryTheory.Bicategory.Functor.Pseudofunctor
+module
+
+public import Mathlib.CategoryTheory.Bicategory.Adjunction.Mate
+public import Mathlib.CategoryTheory.Bicategory.Functor.Pseudofunctor
 
 /-!
 # The bicategory of adjunctions in a bicategory
@@ -26,6 +28,8 @@ both pullback and pushforward functors.
 * https://ncatlab.org/nlab/show/mate
 
 -/
+
+@[expose] public section
 
 universe w v u
 
@@ -112,7 +116,7 @@ instance : Category (a ⟶ b) where
 /-- Constructor for isomorphisms between 1-morphisms in the bicategory `Adj B`. -/
 @[simps]
 def iso₂Mk {α β : a ⟶ b} (el : α.l ≅ β.l) (er : β.r ≅ α.r)
-    (h : conjugateEquiv β.adj α.adj el.hom = er.hom) :
+    (h : conjugateEquiv β.adj α.adj el.hom = er.hom := by cat_disch) :
     α ≅ β where
   hom :=
     { τl := el.hom
@@ -177,7 +181,7 @@ instance : Bicategory (Adj B) where
 
 /-- The forget pseudofunctor from `Adj B` to `B`. -/
 @[simps]
-def forget₁ : (Adj B) ⥤ᵖ B where
+def forget₁ : Adj B ⥤ᵖ B where
   obj a := a.obj
   map x := x.l
   map₂ α := α.τl
@@ -187,7 +191,7 @@ def forget₁ : (Adj B) ⥤ᵖ B where
 -- TODO: define `forget₂` which sends an adjunction to its right adjoint functor
 
 /-- Given an isomorphism between two 1-morphisms in `Adj B`, this is the
-underlying isomorphisms between the left adjoints. -/
+underlying isomorphism between the left adjoints. -/
 @[simps]
 def lIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.l ≅ adj₂.l where
   hom := e.hom.τl
@@ -196,7 +200,7 @@ def lIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj�
   inv_hom_id := by rw [← comp_τl, e.inv_hom_id, id_τl]
 
 /-- Given an isomorphism between two 1-morphisms in `Adj B`, this is the
-underlying isomorphisms between the right adjoints. -/
+underlying isomorphism between the right adjoints. -/
 @[simps]
 def rIso {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂) : adj₁.r ≅ adj₂.r where
   hom := e.inv.τr

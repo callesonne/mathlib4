@@ -1,8 +1,9 @@
-/-
-Copyright (c) 2025 Calle Sönne. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Calle Sönne
--/
+module -- shake: keep-all
+
+public import Mathlib.CategoryTheory.Category.Init
+public import Mathlib.Tactic.Common
+public import Mathlib.Tactic.Finiteness.Attr
+public import Mathlib.Util.CompileInductive
 
 import Mathlib.CategoryTheory.Bicategory.Functor.StrictlyUnitary
 

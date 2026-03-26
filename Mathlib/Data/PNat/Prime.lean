@@ -3,8 +3,10 @@ Copyright (c) 2017 Microsoft Corporation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Mario Carneiro, Neil Strickland
 -/
-import Mathlib.Data.Nat.Prime.Defs
-import Mathlib.Data.PNat.Basic
+module
+
+public import Mathlib.Data.Nat.Prime.Defs
+public import Mathlib.Data.PNat.Basic
 
 /-!
 # Primality and GCD on pnat
@@ -12,6 +14,8 @@ import Mathlib.Data.PNat.Basic
 This file extends the theory of `ℕ+` with `gcd`, `lcm` and `Prime` functions, analogous to those on
 `Nat`.
 -/
+
+@[expose] public section
 
 
 namespace Nat.Primes
@@ -80,7 +84,7 @@ theorem lcm_dvd {m n k : ℕ+} (hm : m ∣ k) (hn : n ∣ k) : lcm m n ∣ k :=
   dvd_iff.2 (@Nat.lcm_dvd (m : ℕ) (n : ℕ) (k : ℕ) (dvd_iff.1 hm) (dvd_iff.1 hn))
 
 theorem gcd_mul_lcm (n m : ℕ+) : gcd n m * lcm n m = n * m :=
-  Subtype.eq (Nat.gcd_mul_lcm (n : ℕ) (m : ℕ))
+  Subtype.ext (Nat.gcd_mul_lcm (n : ℕ) (m : ℕ))
 
 theorem eq_one_of_lt_two {n : ℕ+} : n < 2 → n = 1 := by
   intro h; apply le_antisymm; swap
@@ -187,6 +191,7 @@ theorem Coprime.gcd_mul_left_cancel (m : ℕ+) {n k : ℕ+} :
   intro h; apply eq; simp only [gcd_coe, mul_coe]
   apply Nat.Coprime.gcd_mul_left_cancel; simpa
 
+set_option backward.isDefEq.respectTransparency false in
 theorem Coprime.gcd_mul_right_cancel (m : ℕ+) {n k : ℕ+} :
     k.Coprime n → (m * k).gcd n = m.gcd n := by rw [mul_comm]; apply Coprime.gcd_mul_left_cancel
 
@@ -195,6 +200,7 @@ theorem Coprime.gcd_mul_left_cancel_right (m : ℕ+) {n k : ℕ+} :
   intro h; iterate 2 rw [gcd_comm]; symm
   apply Coprime.gcd_mul_left_cancel _ h
 
+set_option backward.isDefEq.respectTransparency false in
 theorem Coprime.gcd_mul_right_cancel_right (m : ℕ+) {n k : ℕ+} :
     k.Coprime m → m.gcd (n * k) = m.gcd n := by
   rw [mul_comm]
@@ -237,6 +243,7 @@ theorem Coprime.factor_eq_gcd_left {a b m n : ℕ+} (cop : m.Coprime n) (am : a 
   apply Coprime.gcd_mul_right_cancel a
   apply Coprime.coprime_dvd_left bn cop.symm
 
+set_option backward.isDefEq.respectTransparency false in
 theorem Coprime.factor_eq_gcd_right {a b m n : ℕ+} (cop : m.Coprime n) (am : a ∣ m) (bn : b ∣ n) :
     a = (b * a).gcd m := by rw [mul_comm]; apply Coprime.factor_eq_gcd_left cop am bn
 
@@ -253,12 +260,7 @@ theorem Coprime.gcd_mul (k : ℕ+) {m n : ℕ+} (h : m.Coprime n) :
   rw [← coprime_coe] at h; apply eq
   simp only [gcd_coe, mul_coe]; apply Nat.Coprime.gcd_mul k h
 
-theorem gcd_eq_left {m n : ℕ+} : m ∣ n → m.gcd n = m := by
-  rw [dvd_iff]
-  intro h
-  apply eq
-  simp only [gcd_coe]
-  apply Nat.gcd_eq_left h
+@[deprecated (since := "2025-11-14")] alias ⟨_, gcd_eq_left⟩ := gcd_eq_left_iff_dvd
 
 theorem Coprime.pow {m n : ℕ+} (k l : ℕ) (h : m.Coprime n) : (m ^ k : ℕ).Coprime (n ^ l) := by
   rw [← coprime_coe] at *; apply Nat.Coprime.pow; apply h

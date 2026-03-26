@@ -3,8 +3,10 @@ Copyright (c) 2022 Thomas Browning. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Thomas Browning
 -/
-import Mathlib.Analysis.SpecialFunctions.Complex.Circle
-import Mathlib.Topology.Algebra.Group.CompactOpen
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
+public import Mathlib.Topology.Algebra.Group.CompactOpen
 
 /-!
 # Pontryagin dual
@@ -20,6 +22,8 @@ isomorphic to its double dual.
 * `PontryaginDual A`: The group of continuous homomorphisms `A →* Circle`.
 -/
 
+@[expose] public section
+
 open Pointwise Function
 
 variable (A B C G H : Type*) [Monoid A] [Monoid B] [Monoid C] [CommGroup G] [Group H]
@@ -33,6 +37,7 @@ def PontryaginDual :=
   A →ₜ* Circle
 deriving TopologicalSpace
 
+set_option backward.isDefEq.respectTransparency false in
 instance [LocallyCompactSpace H] : LocallyCompactSpace (PontryaginDual H) := by
   let Vn : ℕ → Set Circle :=
     fun n ↦ Circle.exp '' { x | |x| < Real.pi / 2 ^ (n + 1)}
@@ -67,6 +72,7 @@ namespace PontryaginDual
 
 open ContinuousMonoidHom
 
+set_option backward.isDefEq.respectTransparency false in
 deriving instance
   T2Space, CommGroup, IsTopologicalGroup,
   Inhabited, FunLike, ContinuousMapClass, MonoidHomClass,
