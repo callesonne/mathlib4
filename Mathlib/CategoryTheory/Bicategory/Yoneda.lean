@@ -25,11 +25,14 @@ universe w₁ v₁ u₁ w v u
 
 namespace Bicategory
 
+section
+
 variable {B : Type u₁} [Bicategory.{w₁, v₁} B]
 
 attribute [local simp] Cat.associator_hom_app Cat.associator_inv_app
   Cat.leftUnitor_hom_app Cat.rightUnitor_hom_app
   Cat.leftUnitor_inv_app Cat.rightUnitor_inv_app
+
 /-- The map on objects underlying the Yoneda embedding. It sends an object `x` to
 the pseudofunctor defined by:
 * Objects: `a ↦ (a ⟶ x)`
@@ -102,10 +105,18 @@ It consists of the following:
 /-   mapId a := isoMk (fun b => leftUnitorNatIso a b) -/
 /-   mapComp f g := (isoMk (fun b ↦ associatorNatIsoRight f g b)) -/
 
+end
 
--- TODO: state cat-level equivalence without universe assumptions
+section
 
-def yonedaEquivInv [LocallySmallBicategory B] (P : Bᵒᵖ ⥤ᵖ Cat) (a : Bᵒᵖ) :
+-- Locally Small bicategory
+variable {B : Type u} [Bicategory.{v, v} B]
+
+attribute [local simp] Cat.associator_hom_app Cat.associator_inv_app
+  Cat.leftUnitor_hom_app Cat.rightUnitor_hom_app
+  Cat.leftUnitor_inv_app Cat.rightUnitor_inv_app
+
+def yonedaEquivInv (P : Bᵒᵖ ⥤ᵖ Cat) (a : Bᵒᵖ) :
     ↑(P.obj a) ⥤ (yoneda.obj (unop a) ⟶ P) where
   obj d := {
     -- Again this should be a general construction...? P.mapFunctor ⋙ opFunctor?
@@ -149,10 +160,6 @@ def yonedaEquiv [LocallySmallBicategory B] (P : Bᵒᵖ ⥤ᵖ Cat.{u₁, u₁})
 def yonedaPairing (P : Bᵒᵖ ⥤ᵖ Cat.{w₁, v₁}) : Bᵒᵖ ⥤ᵖ Cat :=
     (yoneda (B := B)).op.comp (yoneda₀ P)
 
-
--- attribute [-simp] Cat.associator_hom_app Cat.associator_inv_app
---   Cat.leftUnitor_hom_app Cat.rightUnitor_hom_app
---   Cat.leftUnitor_inv_app Cat.rightUnitor_inv_app
 /- def yonedaEvaluation (P ) -/
 --attribute [-simp] Iso.app_hom
 -- I don't want to deal w/ universe issues for now
@@ -162,9 +169,7 @@ def yonedaLemmaHom [SmallBicategory B] (P : Bᵒᵖ ⥤ᵖ Cat.{u₁, u₁}) :
     obj θ := (θ.app a).obj (𝟙 (unop a))
     map Γ := (Γ.app a).app (𝟙 (unop a))
   }
-  -- Possibly need Cat.NatIso.ofComponents here
   naturality {a b} f := NatIso.ofComponents
-    -- TODO: can I use bicategorical coherence here to simplify?
     (fun θ =>
       ((θ.app b).mapIso (λ_ f.unop ≪≫ (ρ_ f.unop).symm)) ≪≫
         ( (θ.naturality f).app (𝟙 (unop a)))) -- Cat.Iso.app might not be needed
@@ -182,18 +187,6 @@ def yonedaLemmaHom [SmallBicategory B] (P : Bᵒᵖ ⥤ᵖ Cat.{u₁, u₁}) :
     simp [- NatTrans.naturality_assoc]
     simp_rw [← Functor.map_comp_assoc]
     simp
-
-
-#check NatTrans.naturality
-  /- left_triangle := sorry -/
-
-/-
-WANT NOW: for any pseudofunctor P, asssoc pseudofunctor from B to ( - "" -) sending C to
-Pseudo(yoneda.obj c, P)
-
-Want "evaluation uncurried ..." in this setting. Don't have products of bicategories, so let's do
-"evaluatoin curried": Pseudo()
--/
 
 end Bicategory
 
