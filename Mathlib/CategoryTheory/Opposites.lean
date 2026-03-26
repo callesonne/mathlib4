@@ -108,32 +108,6 @@ end
 
 open Functor
 
-variable [CategoryStruct.{v₁} C]
-
-/-- The opposite category. -/
-@[stacks 001M]
-instance Category.opposite : Category.{v₁} Cᵒᵖ where
-  __ := CategoryStruct.opposite
-  comp_id f := by rw [← op_comp_unop, unop_id, id_comp, Quiver.Hom.op_unop]
-  id_comp f := by rw [← op_comp_unop, unop_id, comp_id, Quiver.Hom.op_unop]
-  assoc f g h := by simp only [← op_comp_unop, Quiver.Hom.unop_op, assoc]
-
--- Note: these need to be proven manually as the original lemmas are only stated in terms
--- of `CategoryStruct`s!
-@[to_dual none]
-theorem op_comp_assoc {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} {Z' : Cᵒᵖ} {h : op X ⟶ Z'} :
-    (f ≫ g).op ≫ h = g.op ≫ f.op ≫ h := by
-  simp only [op_comp, Category.assoc]
-
-@[to_dual none]
-theorem unop_comp_assoc {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : Y ⟶ Z} {Z' : C} {h : unop X ⟶ Z'} :
-    (f ≫ g).unop ≫ h = g.unop ≫ f.unop ≫ h := by
-  simp only [unop_comp, Category.assoc]
-
-end
-
-open Functor
-
 variable [Category.{v₁} C]
 
 /-- The opposite category. -/
@@ -146,10 +120,12 @@ instance Category.opposite : Category.{v₁} Cᵒᵖ where
 
 -- Note: these need to be proven manually as the original lemmas are only stated in terms
 -- of `CategoryStruct`s!
+@[to_dual none]
 theorem op_comp_assoc {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} {Z' : Cᵒᵖ} {h : op X ⟶ Z'} :
     (f ≫ g).op ≫ h = g.op ≫ f.op ≫ h := by
   simp only [op_comp, Category.assoc]
 
+@[to_dual none]
 theorem unop_comp_assoc {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : Y ⟶ Z} {Z' : C} {h : unop X ⟶ Z'} :
     (f ≫ g).unop ≫ h = g.unop ≫ f.unop ≫ h := by
   simp only [unop_comp, Category.assoc]
